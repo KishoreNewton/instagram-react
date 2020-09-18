@@ -95,7 +95,7 @@ export const useLoginPageStyles = makeStyles({
     margin: "22px auto 12px"
   },
   textField: {
-    marginBottom: 6
+    marginBottom: 0
   },
   button: {
     margin: "8px 0px"
@@ -119,6 +119,9 @@ export const useLoginPageStyles = makeStyles({
     height: 16,
     width: 16,
     marginRight: 8
+  },
+  forgotPassword: {
+    fontSize: "0.8rem"
   }
 });
 
