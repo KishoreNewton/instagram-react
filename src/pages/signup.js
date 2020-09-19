@@ -5,8 +5,6 @@ import { TextField, Typography } from "@material-ui/core";
 import { Link } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
-import FacebookIconBlue from '../images/facebook-icon-blue.svg'
-import FacebookIconWhite from '../images/facebook-icon-white.png'
 import { LoginWithFacebook } from "./login";
 
 function SignUpPage() {
