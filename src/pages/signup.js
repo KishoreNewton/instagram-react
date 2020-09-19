@@ -33,27 +33,22 @@ function SignUpPage() {
               <div className={classes.orLine} />
           </div>
           <form>
-            <TextField fullWidth variant="filled" label="Email" margin="dense" className={classes.textField} autoComplete="email" />
-            <TextField fullWidth variant="filled" label="Password" margin="dense" className={classes.textField} autoComplete="current-password" />
-            <TextField fullWidth variant="filled" label="Password" margin="dense" className={classes.textField} autoComplete="current-password" />
+            <TextField fullWidth variant="filled" label="Email" margin="dense" className={classes.textField} type="email" autoComplete="email" />
+            <TextField fullWidth variant="filled" label="Full Name" margin="dense" className={classes.textField} autoComplete="current-password" />
+            <TextField fullWidth variant="filled" label="Username" margin="dense" className={classes.textField} autoComplete="username" />
+            <TextField fullWidth type="password" variant="filled" label="Password" margin="dense" className={classes.textField} autoComplete="password" />
             <Button variant="contained" fullWidth color="primary" className={classes.button} type="submit">
-              Log In
+              Sign Up
             </Button>
           </form>
-        
-          <Button fullWidth color="secondary" >
-            <Typography varient="caption" className={classes.forgotPassword}>
-                Forgot Password
-            </Typography>
-          </Button>
         </Card>
-        <Card className={classes.signUpCard}>
+        <Card className={classes.loginCard}>
           <Typography align="right" variant="body2">
-              Don't have an Account
+             Have an Account
           </Typography>
-          <Link to="/accounts/emailsignup">
-            <Button color="primary" className={classes.signUpButton}>
-              Sign Up
+          <Link to="/accounts/login">
+            <Button color="primary" className={classes.loginButton}>
+              Log in
             </Button> 
           </Link>
         </Card>

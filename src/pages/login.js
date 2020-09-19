@@ -20,7 +20,7 @@ function LoginPage() {
             <CardHeader className={classes.cardHeader} />
             <form>
               <TextField fullWidth variant="filled" label="Username" margin="dense" className={classes.textField} autoComplete="username" />
-              <TextField fullWidth variant="filled" label="Password" margin="dense" className={classes.textField} autoComplete="current-password" />
+              <TextField fullWidth variant="filled" label="Password" type="password" margin="dense" className={classes.textField} autoComplete="current-password" />
               <Button variant="contained" fullWidth color="primary" className={classes.button} type="submit">
                 Log In
               </Button>
