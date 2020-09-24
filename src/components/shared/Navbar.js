@@ -1,10 +1,10 @@
-import { AppBar, InputBase, Hidden, Avatar } from "@material-ui/core"
-import React, { useState } from "react"
-import { useNavbarStyles } from "../../styles"
+import { AppBar, InputBase, Hidden, Avatar, Fade, Grid, Typography } from "@material-ui/core"
+import React, { useState, useEffect } from "react"
+import { useNavbarStyles, WhiteTooltip } from "../../styles"
 import { Link, useHistory } from 'react-router-dom'
 import logo from '../../images/logo.png'
 import { LoadingIcon, AddIcon, LikeIcon, LikeActiveIcon, ExploreIcon, ExploreActiveIcon, HomeIcon, HomeActiveIcon } from '../../icons'
-import { defaultCurrentUser } from '../../data'
+import { defaultCurrentUser, getDefaultUser } from '../../data'
 
 function Navbar({ minimalNavbar }) {
   const classes = useNavbarStyles()
@@ -44,19 +44,55 @@ function Logo() {
 
 function Search() {
   const classes = useNavbarStyles()
+  const [loading, setLoading] = useState(false)
   const [query, setQuery] = useState('')
+  const [results, setResults] = useState([])
+
+  const hasResults = Boolean(query) && results.length > 0
+  
   function handleClearInput() {
     setQuery('')
   }
-  let loading = false
+
+  useEffect(() => {
+    if(!query.trim()) return
+    setResults(Array.from({ length: 5 }, () => getDefaultUser()))
+  }, [query])
+
+
+
   return (
     <>
       <Hidden xsDown>
-        <InputBase className={classes.input} onChange={event => setQuery(event.target.value)} startAdornment={<span className={classes.searchIcon}/>} endAdornment={ loading ? (
-          <LoadingIcon /> 
-        ) : (
-          <span onClick={handleClearInput} className={classes.clearIcon} />
-        )} placeholder="Search" value={query} />
+        <WhiteTooltip arrow interactive TransitionComponent={Fade} open={hasResults} title={
+          hasResults && (
+            <Grid className={classes.resultContainer} container>
+              {results.map(result => (
+                <Grid key={result.id} item className={classes.resultLink}>
+                  <div className={classes.resultWrapper}>
+                    <div className={classes.avatarWrapper}>
+                      <Avatar src={result.profile_image} alt="User avatar" />
+                    </div>
+                    <div className={classes.nameWrapper}>
+                      <Typography variant="body1">
+                        {result.username}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary">
+                        {result.name}
+                      </Typography>
+                    </div>
+                  </div>
+                </Grid>
+              ))}
+            </Grid>
+          )
+        } >
+          <InputBase className={classes.input} onChange={event => setQuery(event.target.value)} startAdornment={<span className={classes.searchIcon}/>} endAdornment={ loading ? (
+            <LoadingIcon /> 
+          ) : (
+            <span onClick={handleClearInput} className={classes.clearIcon} />
+          )} placeholder="Search" value={query} />
+        </WhiteTooltip>
       </Hidden>
     </>
   )
