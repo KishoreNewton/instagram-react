@@ -5,11 +5,13 @@ import { CommentIcon, MoreIcon, ShareIcon, UnlikeIcon, LikeIcon, RemoveIcon, Sav
 import { Link } from "react-router-dom"
 import { Button, Divider, Hidden, TextField, Typography } from "@material-ui/core"
 import HTMLEllipsis from 'react-lines-ellipsis/lib/html'
+import ShowFollowSuggestion from '../shared/FollowSuggestions' 
 
-function FeedPost({ post }) {
+function FeedPost({ post, index }) {
   const classes = useFeedPostStyles()
   const { id, media, likes, user, caption, comments } = post
   const [showCaption, setCaption] = useState(false)
+  const showFollowSuggestion = index === 1
 
   return (
     <>
@@ -76,6 +78,7 @@ function FeedPost({ post }) {
           <Comment />
         </Hidden>
       </article>
+      {showFollowSuggestion && <ShowFollowSuggestion />}
     </>
   )
 }
