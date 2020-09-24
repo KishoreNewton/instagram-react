@@ -1,9 +1,10 @@
-import { AppBar, InputBase, Hidden, Avatar, Fade, Grid, Typography } from "@material-ui/core"
+import { AppBar, InputBase, Hidden, Avatar, Fade, Grid, Typography, Zoom } from "@material-ui/core"
 import React, { useState, useEffect } from "react"
-import { useNavbarStyles, WhiteTooltip } from "../../styles"
+import { useNavbarStyles, WhiteTooltip, RedTooltip } from "../../styles"
 import { Link, useHistory } from 'react-router-dom'
 import logo from '../../images/logo.png'
 import { LoadingIcon, AddIcon, LikeIcon, LikeActiveIcon, ExploreIcon, ExploreActiveIcon, HomeIcon, HomeActiveIcon } from '../../icons'
+import NotificationTooltip from '../notification/NotificationTooltip'
 import { defaultCurrentUser, getDefaultUser } from '../../data'
 
 function Navbar({ minimalNavbar }) {
@@ -15,7 +16,7 @@ function Navbar({ minimalNavbar }) {
     <AppBar className={classes.appBar}>
       <section className={classes.section}>
         <Logo />
-        {!minimalNavbar && <Search />}
+        {!minimalNavbar && <Search history={history} />}
         {!minimalNavbar && <Links path={path} />}
         {/* {!minimalNavabar && (
           <>
@@ -42,7 +43,7 @@ function Logo() {
   )
 }
 
-function Search() {
+function Search({ history }) {
   const classes = useNavbarStyles()
   const [loading, setLoading] = useState(false)
   const [query, setQuery] = useState('')
@@ -68,7 +69,9 @@ function Search() {
           hasResults && (
             <Grid className={classes.resultContainer} container>
               {results.map(result => (
-                <Grid key={result.id} item className={classes.resultLink}>
+                <Grid key={result.id} item className={classes.resultLink} onClick={() => {
+                  history.push(`/${result.username}`)
+                }}>
                   <div className={classes.resultWrapper}>
                     <div className={classes.avatarWrapper}>
                       <Avatar src={result.profile_image} alt="User avatar" />
@@ -101,9 +104,21 @@ function Search() {
 function Links({ path }) {
   const classes = useNavbarStyles()
   const [showList, setList] = useState(false)
+  const [showTooltip, setTooltip] = useState()
+
+  useEffect(() => {
+    const timeout = setTimeout(handleHideTooltip, 5000)
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [])
 
   function handleToggleList() {
     setList(prev => !prev)
+  }
+
+  function handleHideTooltip(){
+    setTooltip(false)
   }
 
   return (
@@ -119,9 +134,11 @@ function Links({ path }) {
           <Link to="/explore">
             {path === "/explore" ? <ExploreActiveIcon /> : <ExploreIcon />}
           </Link>
-          <div className={classes.notifications} onClick={handleToggleList}>
-            {showList ? <LikeActiveIcon /> : <LikeIcon />}
-          </div>
+          <RedTooltip arrow open={showTooltip} onOpen={handleHideTooltip} TransitionComponent={Zoom} title={<NotificationTooltip  />}>
+            <div className={classes.notifications} onClick={handleToggleList}>
+              {showList ? <LikeActiveIcon /> : <LikeIcon />}
+            </div>
+          </RedTooltip>
           <Link to={`/${defaultCurrentUser.username}`}>
             <div className={path === `/${defaultCurrentUser.username}` ? classes.profileActive : ""}>
 
