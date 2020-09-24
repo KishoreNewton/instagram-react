@@ -9,7 +9,7 @@ import { getDefaultUser } from '../../data'
 import { Link } from 'react-router-dom'
 import FollowButton from "./FollowButton"
 
-function FollowSuggestions() {
+function FollowSuggestions({ hideHeader }) {
   const classes = useFollowSuggestionsStyles()
 
   let loading = false
