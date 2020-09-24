@@ -4,7 +4,7 @@ import { Typography } from "@material-ui/core"
 import { Link } from 'react-router-dom'
 
 function NotFoundPage() {
-  return <Layout title="Page Not Found" marginTop={120}>
+  return <Layout minimalNavbar title="Page Not Found" marginTop={120}>
     <Typography varient="h5" align="center" paragraph>
       Sorry, this page isn't avaliable
     </Typography>
@@ -16,7 +16,7 @@ function NotFoundPage() {
         </Typography>
       </Link>
     </Typography>
-  </Layout>;
+  </Layout>
 }
 
 export default NotFoundPage;
