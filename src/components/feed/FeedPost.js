@@ -1,9 +1,9 @@
 import React, { useState } from "react"
 import { useFeedPostStyles } from "../../styles"
 import UserCard from '../shared/UserCard'
-import { CommentIcon, MoreIcon, ShareIcon } from '../../icons'
+import { CommentIcon, MoreIcon, ShareIcon, UnlikeIcon, LikeIcon } from '../../icons'
 import { Link } from "react-router-dom"
-import { Button, Typography } from "@material-ui/core"
+import { Button, Divider, Hidden, Typography } from "@material-ui/core"
 import HTMLEllipsis from 'react-lines-ellipsis/lib/html'
 
 function FeedPost({ post }) {
@@ -15,7 +15,7 @@ function FeedPost({ post }) {
     <>
       <article className={classes.article}>
         <div className={classes.postHeader}>
-          <UserCard />
+          <UserCard user={user} />
           <MoreIcon className={classes.moreIcon} />
         </div>
         <div>
@@ -43,7 +43,7 @@ function FeedPost({ post }) {
               <Typography variant="body2" component="span" dangerouslySetInnerHTML={{ __html: caption }} />
             ) : (
               <div className={classes.captionWrapper}>
-                <HTMLEllipsis unsafehtml={caption} className={classes.caption} maxLine="0" ellipsis="..." basedOn="letters" />
+                <HTMLEllipsis unsafeHTML={caption} className={classes.caption} maxLine="0" ellipsis="..." basedOn="letters" />
                 <Button className={classes.moreButton} onClick={() => setCaption(true)}>
                   more
                 </Button>
@@ -67,18 +67,37 @@ function FeedPost({ post }) {
               </Link>
             </div>
           ))}
+          <Typography color="textSecondary" className={classes.datePosted}>
+            5 DAYS AGO
+          </Typography>
         </div>
+        <Hidden xsDown>
+          <Divider />
+          <Comment />
+        </Hidden>
       </article>
     </>
   )
 }
 
 function LikeButton() {
-  return (
-    <>
-    
-    </>
-  )
+  const classes = useFeedPostStyles()
+  const [liked, setLiked] = React.useState(false)
+  const Icon = liked ? UnlikeIcon : LikeIcon
+  const className = liked ? classes.liked : classes.like
+  const onClick = liked ? handleUnlike : handleLike
+
+  function handleLike() {
+    console.log('like')
+    setLiked(true)
+  }
+
+  function handleUnlike() {
+    console.log('unlike')
+    setLiked(false)
+  }
+
+  return <Icon className={className} onClick={onClick} />
 }
 
 function SaveButton() {
@@ -89,4 +108,14 @@ function SaveButton() {
   )
 }
 
+function Comment() {
+  return(
+    <>
+    
+    </>
+  )
+}
+
 export default FeedPost;
+
+
