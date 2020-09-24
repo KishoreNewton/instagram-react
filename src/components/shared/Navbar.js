@@ -1,9 +1,10 @@
-import { AppBar, InputBase, Hidden } from "@material-ui/core"
+import { AppBar, InputBase, Hidden, Avatar } from "@material-ui/core"
 import React, { useState } from "react"
 import { useNavbarStyles } from "../../styles"
 import { Link, useHistory } from 'react-router-dom'
 import logo from '../../images/logo.png'
 import { LoadingIcon, AddIcon, LikeIcon, LikeActiveIcon, ExploreIcon, ExploreActiveIcon, HomeIcon, HomeActiveIcon } from '../../icons'
+import { defaultCurrentUser } from '../../data'
 
 function Navbar({ minimalNavbar }) {
   const classes = useNavbarStyles()
@@ -63,6 +64,11 @@ function Search() {
 
 function Links({ path }) {
   const classes = useNavbarStyles()
+  const [showList, setList] = useState(false)
+
+  function handleToggleList() {
+    setList(prev => !prev)
+  }
 
   return (
     <>
@@ -73,6 +79,18 @@ function Links({ path }) {
           </Hidden>
           <Link to="/">
             {path === "/" ? <HomeActiveIcon /> : <HomeIcon />}
+          </Link>
+          <Link to="/explore">
+            {path === "/explore" ? <ExploreActiveIcon /> : <ExploreIcon />}
+          </Link>
+          <div className={classes.notifications} onClick={handleToggleList}>
+            {showList ? <LikeActiveIcon /> : <LikeIcon />}
+          </div>
+          <Link to={`/${defaultCurrentUser.username}`}>
+            <div className={path === `/${defaultCurrentUser.username}` ? classes.profileActive : ""}>
+
+            </div>
+            <Avatar src={defaultCurrentUser.profile_image} className={classes.profileImage} />
           </Link>
         </div>
       </div>    
