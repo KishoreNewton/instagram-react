@@ -6,6 +6,7 @@ import logo from '../../images/logo.png'
 import { LoadingIcon, AddIcon, LikeIcon, LikeActiveIcon, ExploreIcon, ExploreActiveIcon, HomeIcon, HomeActiveIcon } from '../../icons'
 import NotificationTooltip from '../notification/NotificationTooltip'
 import { defaultCurrentUser, getDefaultUser } from '../../data'
+import NotificationList from "../notification/NotificationList"
 
 function Navbar({ minimalNavbar }) {
   const classes = useNavbarStyles()
@@ -104,10 +105,10 @@ function Search({ history }) {
 function Links({ path }) {
   const classes = useNavbarStyles()
   const [showList, setList] = useState(false)
-  const [showTooltip, setTooltip] = useState()
+  const [showTooltip, setTooltip] = useState(true)
 
   useEffect(() => {
-    const timeout = setTimeout(handleHideTooltip, 5000)
+    const timeout = setTimeout(handleHideTooltip, 4000)
     return () => {
       clearTimeout(timeout)
     }
@@ -124,6 +125,7 @@ function Links({ path }) {
   return (
     <>
       <div className={classes.linksContainer}>
+        {showList && <NotificationList />}
         <div className={classes.linksWrapper}>
           <Hidden xsDown>
             <AddIcon />
