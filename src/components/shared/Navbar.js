@@ -1,19 +1,21 @@
 import { AppBar, InputBase, Hidden } from "@material-ui/core"
 import React, { useState } from "react"
 import { useNavbarStyles } from "../../styles"
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import logo from '../../images/logo.png'
-import { LoadingIcon } from '../../icons'
+import { LoadingIcon, AddIcon, LikeIcon, LikeActiveIcon, ExploreIcon, ExploreActiveIcon, HomeIcon, HomeActiveIcon } from '../../icons'
 
 function Navbar({ minimalNavbar }) {
   const classes = useNavbarStyles()
+  const history = useHistory()
+  const path = history.location.pathname
 
   return (
     <AppBar className={classes.appBar}>
       <section className={classes.section}>
         <Logo />
         {!minimalNavbar && <Search />}
-        {!minimalNavbar && <Links />}
+        {!minimalNavbar && <Links path={path} />}
         {/* {!minimalNavabar && (
           <>
             <Search />
@@ -59,10 +61,21 @@ function Search() {
   )
 }
 
-function Links() {
+function Links({ path }) {
+  const classes = useNavbarStyles()
+
   return (
     <>
-    
+      <div className={classes.linksContainer}>
+        <div className={classes.linksWrapper}>
+          <Hidden xsDown>
+            <AddIcon />
+          </Hidden>
+          <Link to="/">
+            {path === "/" ? <HomeActiveIcon /> : <HomeIcon />}
+          </Link>
+        </div>
+      </div>    
     </>
   )
 }
