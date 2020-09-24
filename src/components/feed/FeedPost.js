@@ -6,19 +6,21 @@ import { Link } from "react-router-dom"
 import { Button, Divider, Hidden, TextField, Typography } from "@material-ui/core"
 import HTMLEllipsis from 'react-lines-ellipsis/lib/html'
 import ShowFollowSuggestion from '../shared/FollowSuggestions' 
+import OptionsDialog from '../shared/OptionsDialog'
 
 function FeedPost({ post, index }) {
   const classes = useFeedPostStyles()
   const { id, media, likes, user, caption, comments } = post
   const [showCaption, setCaption] = useState(false)
+  const [showOptionsDialog, setOptionsDialog] = useState(false)
   const showFollowSuggestion = index === 1
 
   return (
     <>
-      <article className={classes.article}>
+      <article className={classes.article} style={{ marginBottom: showFollowSuggestion && 30 }} >
         <div className={classes.postHeader}>
           <UserCard user={user} />
-          <MoreIcon className={classes.moreIcon} />
+          <MoreIcon className={classes.moreIcon} onClick={() => setOptionsDialog(true)} />
         </div>
         <div>
           <img src={media} alt="Post Media" className={classes.image} />
@@ -79,6 +81,7 @@ function FeedPost({ post, index }) {
         </Hidden>
       </article>
       {showFollowSuggestion && <ShowFollowSuggestion />}
+      {showOptionsDialog && <OptionsDialog onClose={() => setOptionsDialog(false)} />}
     </>
   )
 }
@@ -91,12 +94,10 @@ function LikeButton() {
   const onClick = liked ? handleUnlike : handleLike
 
   function handleLike() {
-    console.log('like')
     setLiked(true)
   }
 
   function handleUnlike() {
-    console.log('unlike')
     setLiked(false)
   }
 
@@ -110,12 +111,10 @@ function SaveButton() {
   const onClick = saved ? handleRemove : handleSave
 
   function handleSave() {
-    console.log('Save')
     setSaved(true)
   }
 
   function handleRemove() {
-    console.log('remove save')
     setSaved(false)
   }
 
