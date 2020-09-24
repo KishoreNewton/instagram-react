@@ -1,9 +1,9 @@
 import React, { useState } from "react"
 import { useFeedPostStyles } from "../../styles"
 import UserCard from '../shared/UserCard'
-import { CommentIcon, MoreIcon, ShareIcon, UnlikeIcon, LikeIcon } from '../../icons'
+import { CommentIcon, MoreIcon, ShareIcon, UnlikeIcon, LikeIcon, RemoveIcon, SaveIcon } from '../../icons'
 import { Link } from "react-router-dom"
-import { Button, Divider, Hidden, Typography } from "@material-ui/core"
+import { Button, Divider, Hidden, TextField, Typography } from "@material-ui/core"
 import HTMLEllipsis from 'react-lines-ellipsis/lib/html'
 
 function FeedPost({ post }) {
@@ -22,7 +22,7 @@ function FeedPost({ post }) {
           <img src={media} alt="Post Media" className={classes.image} />
         </div>
         <div className={classes.postButtonsWrapper}>
-          <div className={classes.postButtonWrapper}>
+          <div className={classes.postButtons}>
             <LikeButton />
             <Link to={`/p/${id}`}>
               <CommentIcon />
@@ -101,18 +101,39 @@ function LikeButton() {
 }
 
 function SaveButton() {
-  return (
-    <>
-    
-    </>
-  )
+  const classes = useFeedPostStyles()
+  const [saved, setSaved] = React.useState(false)
+  const Icon = saved ? RemoveIcon : SaveIcon
+  const onClick = saved ? handleRemove : handleSave
+
+  function handleSave() {
+    console.log('Save')
+    setSaved(true)
+  }
+
+  function handleRemove() {
+    console.log('remove save')
+    setSaved(false)
+  }
+
+  return <Icon  onClick={onClick} className={classes.saveIcon} />
 }
 
 function Comment() {
-  return(
-    <>
-    
-    </>
+  const classes = useFeedPostStyles()
+  const [content, setContent] = React.useState('')
+  return (
+    <div className={classes.commentContainer}>
+      <TextField fullWidth value={content} placeholder="Add a comment..." multiline rowsMax={2} rows={1} className={classes.textField} onChange={event => setContent(event.target.value)} InputProps={{
+        classes: {
+          root: classes.root,
+          underline: classes.underline
+        }
+      }} /> 
+      <Button color="primary" className={classes.commentButton} disabled={!content.trim()} >
+        Post
+      </Button>
+    </div>
   )
 }
 
