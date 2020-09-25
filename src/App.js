@@ -1,5 +1,5 @@
-import React, { useRef, useEffect } from "react"
-import { BrowserRouter as Switch, Route, useHistory, useLocation } from 'react-router-dom'
+import React from "react"
+import { Switch, Route } from 'react-router-dom'
 import FeedPage from './pages/feed'
 import ExplorePage from './pages/explore'
 import ProfilePage from './pages/profile'
@@ -8,23 +8,10 @@ import EditProfilePage from './pages/edit-profile'
 import LoginPage from './pages/login'
 import SignUpPage from './pages/signup'
 import NotFoundPage from './pages/not-found'
-import PostModal from './components/post/PostModal'
 
 function App() {
-  const history = useHistory()
-  const location = useLocation()
-  const prevLocation = useRef(location)
-  const modal = location.state?.modal
-
-  useEffect(() => {
-    if(history.action == 'POP' && !modal) {
-      prevLocation.current = location
-    }
-  }, [location, modal, history.action])
-
-  const isModalOpen = modal && prevLocation.current !== location
-
   return (
+    <>    
       <Switch>
         <Route exact path="/" component={FeedPage} />
         <Route path="/explore" component={ExplorePage} />
@@ -35,6 +22,7 @@ function App() {
         <Route exact path="/accounts/emailsignup" component={SignUpPage} />
         <Route path="*" component={NotFoundPage} />
       </Switch>
+    </>
   )
 }
 
