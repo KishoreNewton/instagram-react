@@ -6,12 +6,16 @@ import { Link } from "react-router-dom"
 import { Button, Divider, Hidden, TextField, Typography } from "@material-ui/core"
 import OptionsDialog from '../shared/OptionsDialog'
 import { defaultPost } from '../../data'
-// import {  }
+import PostSkeleton from "./PostSkeleton"
 
 function Post({ post, index }) {
   const classes = usePostStyles()
   const { id, media, likes, user, caption, comments } = defaultPost
+  const [loading, setLoading] = useState(true)
   const [showOptionsDialog, setOptionsDialog] = useState(false)
+
+  setTimeout(() => setLoading(false), 2000)
+  if(loading) return <PostSkeleton />
 
   return (
     <div className={classes.postContainer}>
