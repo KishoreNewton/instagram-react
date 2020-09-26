@@ -7,7 +7,6 @@ import { Button, Divider, Hidden, TextField, Typography } from "@material-ui/cor
 import OptionsDialog from '../shared/OptionsDialog'
 import { defaultPost } from '../../data'
 import PostSkeleton from "./PostSkeleton"
-// import {  }
 
 function Post({ post, index }) {
   const classes = usePostStyles()
