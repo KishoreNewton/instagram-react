@@ -6,6 +6,7 @@ import { Avatar, Button, Card, CardContent, Dialog, DialogTitle, Divider, Hidden
 import ProfilePicture from '../components/shared/ProfilePicture'
 import { Link } from "react-router-dom"
 import { GearIcon } from "../icons"
+import ProfileTabs from '../components/profile/ProfileTabs'
 
 function ProfilePage() {
   const isOwner = true
@@ -46,6 +47,7 @@ function ProfilePage() {
           </Card>
         </Hidden>
         {showOptionsMenu && <OptionsMenu handleCloseMenu={handleCloseMenu} />}
+        <ProfileTabs user={defaultCurrentUser} isOwner={isOwner} />
       </div>
     </Layout>
   )
