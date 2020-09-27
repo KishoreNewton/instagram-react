@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import Layout from "../components/shared/Layout"
 import { useProfilePageStyles } from "../styles"
 import { defaultCurrentUser } from '../data'
-import { Button, Card, CardContent, Hidden, Typography } from "@material-ui/core"
+import { Button, Card, CardContent, Dialog, DialogTitle, Divider, Hidden, Typography, Zoom } from "@material-ui/core"
 import ProfilePicture from '../components/shared/ProfilePicture'
 import { Link } from "react-router-dom"
 import { GearIcon } from "../icons"
@@ -14,6 +14,10 @@ function ProfilePage() {
 
   function handleOptionsMenuClick() {
     setOptionsMenu(true)
+  }
+
+  function handleCloseMenu() {
+    setOptionsMenu(false)
   }
 
   return (
@@ -41,6 +45,7 @@ function ProfilePage() {
             <PostCountSection />
           </Card>
         </Hidden>
+        {showOptionsMenu && <OptionsMenu handleCloseMenu={handleCloseMenu} />}
       </div>
     </Layout>
   )
@@ -122,6 +127,50 @@ function PostCountSection() {
 
 function NameBioSection() {
   return <>NameBioSection</>
+}
+
+function OptionsMenu({ handleCloseMenu }) {
+  const classes = useProfilePageStyles()
+  const [showLogOutMessage, setLogOutMessage] = useState(false)
+
+  function handleLogOutClick() {
+    setLogOutMessage(true)
+  }
+
+  return(
+    <Dialog open classes={{ scrollPaper: classes.dialogScrollPaper, paper: classes.dialogPaper }} TransitionComponent={Zoom} >
+      {showLogOutMessage ? (
+        <DialogTitle className={classes.dialogTitle}>
+          Logging Out
+          <Typography color="textSecondary">
+            You need to log back in to continure using Instagram.
+          </Typography>
+        </DialogTitle>
+      ): (
+        <>
+          <OptionsItem text="Change Password" />
+          <OptionsItem text="Nametag" />
+          <OptionsItem text="Authorized Apps" />
+          <OptionsItem text="Notifications" />
+          <OptionsItem text="Privacy and Security" />
+          <OptionsItem text="Log out" onClick={handleLogOutClick} />
+          <OptionsItem text="Cancel" onClick={handleCloseMenu} />
+        </>
+      )}
+      
+    </Dialog>
+  )
+}
+
+function OptionsItem({ text, onClick }) {
+  return (
+    <>
+      <Button style={{ padding: '12px 8px' }} onClick={onClick}>
+        {text}
+      </Button>
+      <Divider />
+    </>
+  )
 }
 
 export default ProfilePage
