@@ -1,10 +1,10 @@
-import React from "react";
-import { useEditProfilePageStyles } from "../styles";
+import React from "react"
+import { useEditProfilePageStyles } from "../styles"
 
 function EditProfilePage() {
-  useEditProfilePageStyles();
+  useEditProfilePageStyles()
 
-  return <div>EditProfilePage</div>;
+  return <div>EditProfilePage</div>
 }
 
-export default EditProfilePage;
+export default EditProfilePage
