@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import Layout from "../components/shared/Layout"
 import { useProfilePageStyles } from "../styles"
 import { defaultCurrentUser } from '../data'
-import { Button, Card, CardContent, Dialog, DialogTitle, Divider, Hidden, Typography, Zoom } from "@material-ui/core"
+import { Avatar, Button, Card, CardContent, Dialog, DialogTitle, Divider, Hidden, Typography, Zoom } from "@material-ui/core"
 import ProfilePicture from '../components/shared/ProfilePicture'
 import { Link } from "react-router-dom"
 import { GearIcon } from "../icons"
@@ -53,12 +53,14 @@ function ProfilePage() {
 
 function ProfileNameSection({ user, isOwner, handleOptionsMenuClick }) {
   const classes = useProfilePageStyles()
+  const [showUnfollowDialog, setUnfollowDialog] = useState(false)
+
   let followButton
-  const isFollowing = false
+  const isFollowing = true 
   const isFollower = false
   if (isFollowing) {
     followButton = (
-      <Button variant="outlined" className={classes.button} >
+      <Button onClick={() => setUnfollowDialog(true)} variant="outlined" className={classes.button} >
         Following
       </Button>
     ) 
@@ -117,7 +119,31 @@ function ProfileNameSection({ user, isOwner, handleOptionsMenuClick }) {
           ) : followButton}
         </section>
       </Hidden>
+      {showUnfollowDialog && <UnfollowDialog user={user} onClose={() => setUnfollowDialog(false)} />}
     </>
+  )
+}
+
+function UnfollowDialog({ user, onClose }) {
+  const classes = useProfilePageStyles()
+  
+  return (
+    <Dialog open classes={{ scrollPaper: classes.unfollowDialogScrollPaper }} onClose TransitionComponent={Zoom} >
+      <div className={classes.wrapper}>
+        <Avatar src={user.profile_image} alt={`${user.username}'s avatar`} className={classes.avatar} />
+      </div>
+      <Typography align="center" variant="body2" className={classes.unfollowDialogText}>
+        Unfollow @{user.username}?
+      </Typography>
+      <Divider />
+      <Button className={classes.unfollowButton}>
+        Unfollow
+      </Button>
+      <Divider />
+      <Button onClick={onClose} className={classes.cancelButton}>
+        Cancel
+      </Button>
+    </Dialog>
   )
 }
 
