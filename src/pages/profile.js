@@ -6,6 +6,7 @@ import { Card, CardContent, Hidden } from "@material-ui/core"
 import ProfilePicture from '../components/shared/ProfilePicture'
 
 function ProfilePage() {
+  const isOwner = true
   const classes = useProfilePageStyles()
 
   return (
@@ -13,14 +14,25 @@ function ProfilePage() {
       <div className={classes.container}>
         <Hidden xsDown>
           <Card className={classes.cardLarge}>
-            <ProfilePicture />
+            <ProfilePicture isOwner={isOwner} />
             <CardContent className={classes.cardContentLarge}>
-
+              <ProfileNameSection />
+              <PostCountSection />
+              <NameBioSection />
             </CardContent>
           </Card>
         </Hidden>
         <Hidden smUp>
-
+          <Card className={classes.cardSmall}>
+            <CardContent>
+              <section className={classes.sectionSmall}>
+                <ProfilePicture isOwner={isOwner} size={77} />
+                <ProfileNameSection />
+              </section>
+              <NameBioSection />
+            </CardContent>
+            <PostCountSection />
+          </Card>
         </Hidden>
       </div>
     </Layout>
@@ -28,7 +40,15 @@ function ProfilePage() {
 }
 
 function ProfileNameSection() {
-  
+  return <>ProfileNameSection</>
+}
+
+function PostCountSection() {
+  return <>PostCountSection</>
+}
+
+function NameBioSection() {
+  return <>NameBioSection</>
 }
 
 export default ProfilePage
