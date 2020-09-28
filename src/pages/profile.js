@@ -88,7 +88,7 @@ function ProfileNameSection({ user, isOwner, handleOptionsMenuClick }) {
           </Typography>
           {isOwner ? (
             <>
-              <Link to="/acount/edit">
+              <Link to="/accounts/edit">
                 <Button variant="outlined">Edit Profile</Button>
               </Link>
               <div onClick={handleOptionsMenuClick} className={classes.settingsWrapper}>
@@ -115,7 +115,7 @@ function ProfileNameSection({ user, isOwner, handleOptionsMenuClick }) {
             )}
           </div>
           {isOwner ? (
-            <Link to="/acount/edit">
+            <Link to="/accounts/edit">
               <Button variant="outlined" style={{ width: '100%' }}>Edit Profile</Button>
             </Link>
           ) : followButton}
