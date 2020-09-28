@@ -95,7 +95,7 @@ export const useLoginPageStyles = makeStyles({
     margin: "22px auto 12px"
   },
   textField: {
-    marginBottom: 6
+    marginBottom: 0
   },
   button: {
     margin: "8px 0px"
@@ -119,6 +119,9 @@ export const useLoginPageStyles = makeStyles({
     height: 16,
     width: 16,
     marginRight: 8
+  },
+  forgotPassword: {
+    fontSize: "0.8rem"
   }
 });
 
@@ -1629,10 +1632,32 @@ export const useProfileTabsStyles = makeStyles(theme => {
 export const useGridPostStyles = makeStyles(theme => ({
   image: {
     width: "100%",
+    height: "100%",
+    objectFit: "cover",
     userSelect: "none"
   },
   gridPostContainer: {
-    position: "relative"
+    [theme.breakpoints.down("lg")]: {
+      height: "275px",
+      width: "100%",
+      marginBottom: "1%"
+    },
+    [theme.breakpoints.down("md")]: {
+      height: "275px",
+      width: "100%"  
+    },
+    [theme.breakpoints.down("sm")]: {
+      height: "250px",
+      width: "100%"  
+    },
+    [theme.breakpoints.down("xs")]: {
+      height: "150px",
+      width: "100%"  
+    },
+    marginLeft: "5%",
+    position: "relative",
+    height: "300px",
+    width: "100%"
   },
   gridPostOverlay: {
     [theme.breakpoints.down("xs")]: {
