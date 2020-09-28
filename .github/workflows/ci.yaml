@@ -1,0 +1,12 @@
+# name: Insta-CI
+
+# on: 
+#   pull_request:
+#     branches: [dev, master]
+#   push: 
+#     branched: [dev, master]
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     env: 
