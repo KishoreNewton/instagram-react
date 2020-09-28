@@ -23,7 +23,7 @@ export function getDefaultUser() {
 export const defaultPost = {
   id: uuid(),
   likes: 10,
-  caption: `<span class="">Do you know the 10 JavaScript concepts you need to learn React? 🤔⚛️👇<br>•<br>•<br>👉 Get the FREE cheatsheet to learn them now: bit.ly/10-js-tips 🔥</span>`,
+  caption: `<span class="">This is some data over here</span>`,
   user: defaultUser,
   media:
     "https://images.freeimages.com/images/large-previews/338/sunset-over-lake-2-1377767.jpg",
@@ -35,7 +35,7 @@ export function getDefaultPost() {
   return {
     id: uuid(),
     likes: 10,
-    caption: `<span class="">Do you know the 10 JavaScript concepts you need to learn React? 🤔⚛️👇<br>•<br>•<br>👉 Get the FREE cheatsheet to learn them now: bit.ly/10-js-tips 🔥</span>`,
+    caption: `<span class="">This is some data over here</span>`,
     user: defaultUser,
     media:
       "https://cdn.pixabay.com/photo/2020/03/01/10/24/power-4892237_960_720.jpg",
@@ -66,11 +66,11 @@ export const defaultCurrentUser = {
   name: "myself",
   profile_image:
     "https://images.freeimages.com/images/large-previews/338/sunset-over-lake-2-1377767.jpg",
-  website: "https://react12.io",
+  website: "https://demo.someweb",
   email: "me@gmail.com",
   bio: "This is my bio",
   phone_number: "555-555-5555",
-  posts: Array.from({ length: 10 }, () => getDefaultPost()),
+  posts: [],
   followers: [defaultUser],
   following: [defaultUser]
 };
