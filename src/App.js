@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from "react"
-import { Switch, Route, useHistory, useLocation } from 'react-router-dom'
+import React, { useEffect, useRef, useContext } from "react"
+import { Switch, Route, useHistory, useLocation, Redirect } from 'react-router-dom'
 import FeedPage from './pages/feed'
 import ExplorePage from './pages/explore'
 import ProfilePage from './pages/profile'
@@ -9,8 +9,11 @@ import LoginPage from './pages/login'
 import SignUpPage from './pages/signup'
 import NotFoundPage from './pages/not-found'
 import PostModal from './components/post/PostModal'
+import { AuthContext } from "./auth"
 
 function App() {
+  const { authState } = useContext(AuthContext)
+  const isAuth = authState.status === 'in'
   const history = useHistory()
   const location = useLocation()
   const previousLocation = useRef(location)
@@ -24,6 +27,16 @@ function App() {
 
   const isModalOpen = modal && previousLocation.current !== location
 
+  if(!isAuth) {
+    return (
+      <Switch>
+        <Route path="/accounts/login" component={LoginPage} />
+        <Route exact path="/accounts/emailsignup" component={SignUpPage} /> 
+        <Redirect to="/accounts/login" />
+      </Switch>
+    )
+  }
+
   return (
     <>    
       <Switch location={isModalOpen ? previousLocation.current : location}>
@@ -32,8 +45,6 @@ function App() {
         <Route exact path="/:username" component={ProfilePage} />
         <Route exact path="/p/:postId" component={PostPage} />
         <Route path="/accounts/edit" component={EditProfilePage} />
-        <Route path="/accounts/login" component={LoginPage} />
-        <Route exact path="/accounts/emailsignup" component={SignUpPage} />
         <Route path="*" component={NotFoundPage} />
       </Switch>
       {isModalOpen && <Route exact path="/p/:postId" component={PostModal} />}
