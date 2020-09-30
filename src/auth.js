@@ -10,14 +10,14 @@ const provider = new firebase.auth.GoogleAuthProvider();
 
 // Find these options in your Firebase console
 firebase.initializeApp({
-  apiKey: `${process.env.FIREBASE_APIKEY}`,
-  authDomain: `${process.env.FIREBASE_authDomain}`,
-  databaseURL: `${process.env.FIREBASE_databaseURL}`,
-  projectId: `${process.env.FIREBASE_projectId}`,
-  storageBucket: `${process.env.FIREBASE_storageBucket}`,
-  messagingSenderId: `${process.env.FIREBASE_messagingSenderId}`,
-  appId: `${process.env.FIREBASE_appId}`,
-  measurementId: `${process.env.FIREBASE_measurementId}`,
+  apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
+  authDomain: process.env.REACT_APP_FIREBASE_authDomain,
+  databaseURL: process.env.REACT_APP_FIREBASE_databaseURL,
+  projectId: process.env.REACT_APP_FIREBASE_projectId,
+  storageBucket: process.env.REACT_APP_FIREBASE_storageBucket,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_messagingSenderId,
+  appId: process.env.REACT_APP_FIREBASE_appId,
+  measurementId: process.env.REACT_APP_FIREBASE_measurementId,
 });
 export const AuthContext = createContext();
 
@@ -101,6 +101,7 @@ function AuthProvider({ children }) {
           signInWithGoogle,
           signOut,
           signUpWithEmailAndPassword,
+          logInWithEmailAndPassword
         }}
       >
         {children}

@@ -1,22 +1,26 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useLoginPageStyles } from '../styles';
 import SEO from '../components/shared/Seo';
 import { CardHeader, InputAdornment, TextField, Typography } from '@material-ui/core';
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import FacebookIconBlue from '../images/facebook-icon-blue.svg';
 import FacebookIconWhite from '../images/facebook-icon-white.png';
+import { AuthContext } from '../auth';
 
 function LoginPage() {
   const classes = useLoginPageStyles();
+  const { logInWithEmailAndPassword } =  useContext(AuthContext)
   const { register, handleSubmit, watch, formState } = useForm({ mode: 'onBlur' })
   const [showPassword, setPassword] = useState(false)
   const hasPassword = Boolean(watch('password'))
+  const history = useHistory()
 
-  function onSubmit(data) {
-    console.log({ data })
+  async function onSubmit(data) {
+    await logInWithEmailAndPassword(data.input, data.password)
+    history.push('/')
   }
 
   function togglePasswordVisiblity() {
