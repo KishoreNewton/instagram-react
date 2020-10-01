@@ -19,6 +19,7 @@ firebase.initializeApp({
   appId: process.env.REACT_APP_FIREBASE_appId,
   measurementId: process.env.REACT_APP_FIREBASE_measurementId,
 });
+
 export const AuthContext = createContext();
 
 function AuthProvider({ children }) {
@@ -79,10 +80,19 @@ function AuthProvider({ children }) {
     }
   }
 
+  async function updateEmail(email) {
+    await authState.user.updateEmail(email)
+    console.log(authState.user)
+  }
+
   async function logInWithEmailAndPassword(email, password) {
     return await firebase
       .auth()
       .signInWithEmailAndPassword(email, password);
+  }
+
+  async function logInWithFacebook() {
+    return await firebase.auth.FacebookAuthProvider()
   }
 
   async function signOut() {
@@ -101,7 +111,9 @@ function AuthProvider({ children }) {
           signInWithGoogle,
           signOut,
           signUpWithEmailAndPassword,
-          logInWithEmailAndPassword
+          logInWithEmailAndPassword,
+          logInWithFacebook,
+          updateEmail
         }}
       >
         {children}
