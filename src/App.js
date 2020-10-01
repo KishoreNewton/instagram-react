@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useContext } from "react"
+import React, { useEffect, useRef, useContext, createContext } from "react"
 import { Switch, Route, useHistory, useLocation, Redirect } from 'react-router-dom'
 import FeedPage from './pages/feed'
 import ExplorePage from './pages/explore'
@@ -10,22 +10,30 @@ import SignUpPage from './pages/signup'
 import NotFoundPage from './pages/not-found'
 import PostModal from './components/post/PostModal'
 import { AuthContext } from "./auth"
+import { useSubscription } from '@apollo/react-hooks'
+import LoadingScreen from './components/shared/LoadingScreen'
+import { ME } from './graphql/subscriptions'
+
+export const UserContext = createContext()
 
 function App() {
   const { authState } = useContext(AuthContext)
   const isAuth = authState.status === 'in'
+  const userId = isAuth ? authState.user.uid : null
+  const variables = { userId }
+  const { data, loading } = useSubscription(ME, { variables })
   const history = useHistory()
   const location = useLocation()
   const previousLocation = useRef(location)
   const modal = location.state?.modal
 
   useEffect(() => {
-    if(history.action !== 'POP' && !modal) {
+    if(history.action !== 'POP' && !modal) { 
       previousLocation.current = location
     }
   }, [location, modal, history.action])
 
-  const isModalOpen = modal && previousLocation.current !== location
+  if (loading) return <LoadingScreen />
 
   if(!isAuth) {
     return (
@@ -37,8 +45,12 @@ function App() {
     )
   }
 
+  const isModalOpen = modal && previousLocation.current !== location
+  const me = isAuth && data ? data.users[0] : null
+  const currentUserId = me.id
+
   return (
-    <>    
+    <UserContext.Provider value={{me, currentUserId }}>    
       <Switch location={isModalOpen ? previousLocation.current : location}>
         <Route exact path="/" component={FeedPage} />
         <Route path="/explore" component={ExplorePage} />
@@ -48,7 +60,7 @@ function App() {
         <Route path="*" component={NotFoundPage} />
       </Switch>
       {isModalOpen && <Route exact path="/p/:postId" component={PostModal} />}
-    </>
+    </UserContext.Provider>
   )
 }
 

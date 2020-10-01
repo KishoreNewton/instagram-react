@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { useSignUpPageStyles } from '../styles';
 import SEO from '../components/shared/Seo';
 import {
@@ -16,7 +15,7 @@ import { HighlightOff, CheckCircleOutline } from '@material-ui/icons';
 import { useForm } from 'react-hook-form';
 import isEmail from 'validator/lib/isEmail';
 import { useApolloClient } from '@apollo/react-hooks';
-import { CHECK_IF_USERNAME_TAKEN } from '../graphql/queries.js'
+import { CHECK_IF_USERNAME_TAKEN } from '../graphql/queries.js';
 
 function SignUpPage() {
   const classes = useSignUpPageStyles();
@@ -24,35 +23,34 @@ function SignUpPage() {
     mode: 'onBlur',
   });
   const { signUpWithEmailAndPassword } = useContext(AuthContext);
-  const history = useHistory();
   const [error, setError] = useState('');
-  const client = useApolloClient()
+  const client = useApolloClient();
 
   async function onSubmit(data) {
     try {
-      setError('')
+      setError('');
       await signUpWithEmailAndPassword(data);
-      history.push('/');
+      window.location = '/';
     } catch (error) {
-      handleError(error)
+      handleError(error);
     }
   }
 
   function handleError(error) {
-    if(error.message.includes("users_username_key")) {
-      setError('Username already taken')
+    if (error.message.includes('users_username_key')) {
+      setError('Username already taken');
     } else if (error.code.includes('auth')) {
-      setError(error.message)
+      setError(error.message);
     }
   }
 
   async function validateUsername(username) {
-    const variables = { username }
+    const variables = { username };
     const response = await client.query({
       query: CHECK_IF_USERNAME_TAKEN,
-      variables
-    })
-    return response.data.users.length === 0
+      variables,
+    });
+    return response.data.users.length === 0;
   }
 
   const errorIcon = (
@@ -139,7 +137,8 @@ function SignUpPage() {
                   minLength: 5,
                   maxLength: 25,
                   pattern: /^[a-zA-Z0-9_.]*$/,
-                  validate: async (input) => await validateUsername(input)
+                  validate: async (input) =>
+                    await validateUsername(input),
                 })}
                 InputProps={{
                   endAdornment: errors.username

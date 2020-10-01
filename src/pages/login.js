@@ -1,32 +1,63 @@
 import React, { useContext, useState } from 'react';
 import { useLoginPageStyles } from '../styles';
 import SEO from '../components/shared/Seo';
-import { CardHeader, InputAdornment, TextField, Typography } from '@material-ui/core';
-import { useForm } from 'react-hook-form'
-import { Link, useHistory } from 'react-router-dom';
+import {
+  CardHeader,
+  InputAdornment,
+  TextField,
+  Typography,
+} from '@material-ui/core';
+import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import FacebookIconBlue from '../images/facebook-icon-blue.svg';
 import FacebookIconWhite from '../images/facebook-icon-white.png';
 import { AuthContext } from '../auth';
+import isEmail from 'validator/lib/isEmail';
+import { useApolloClient } from '@apollo/react-hooks';
+import { GET_USER_EMAIL } from '../graphql/queries';
 
 function LoginPage() {
   const classes = useLoginPageStyles();
-  const { logInWithEmailAndPassword } =  useContext(AuthContext)
-  const { register, handleSubmit, watch, formState } = useForm({ mode: 'onBlur' })
-  const [showPassword, setPassword] = useState(false)
-  const hasPassword = Boolean(watch('password'))
-  const history = useHistory()
+  const { logInWithEmailAndPassword } = useContext(AuthContext);
+  const { register, handleSubmit, watch, formState } = useForm({
+    mode: 'onBlur',
+  });
+  const [showPassword, setPassword] = useState(false);
+  const [error, setError] = useState('');
+  const hasPassword = Boolean(watch('password'));
+  const client = useApolloClient();
 
   async function onSubmit(data) {
-    await logInWithEmailAndPassword(data.input, data.password)
-    history.push('/')
+    if (!isEmail(data.input)) {
+      data.input = await getUserEmail(data.input);
+    }
+    try {
+      await logInWithEmailAndPassword(data.input, data.password);
+      window.location = '/';
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  async function getUserEmail(input) {
+    const variables = { input };
+    const response = await client.query({
+      query: GET_USER_EMAIL,
+      variables,
+    });
+    return response.data.users[0]?.email || 'no@notfound.com';
+  }
+
+  function handleError(error) {
+    if (error.code.includes('auth')) setError(error.message);
   }
 
   function togglePasswordVisiblity() {
-    setPassword(prev => !prev)
+    setPassword((prev) => !prev);
   }
-  
+
   return (
     <>
       <SEO title="Login" />
@@ -39,7 +70,7 @@ function LoginPage() {
                 fullWidth
                 inputRef={register({
                   required: true,
-                  minLength: 5
+                  minLength: 5,
                 })}
                 name="input"
                 variant="filled"
@@ -52,25 +83,29 @@ function LoginPage() {
                 fullWidth
                 inputRef={register({
                   required: true,
-                  minLength: 5
+                  minLength: 5,
                 })}
                 name="password"
                 InputProps={{
                   endAdornment: hasPassword && (
                     <InputAdornment>
-                      <Button onClick={togglePasswordVisiblity}>{showPassword ? "Hide" : "Show"}</Button>
+                      <Button onClick={togglePasswordVisiblity}>
+                        {showPassword ? 'Hide' : 'Show'}
+                      </Button>
                     </InputAdornment>
-                  )
+                  ),
                 }}
                 variant="filled"
                 label="Password"
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? 'text' : 'password'}
                 margin="dense"
                 className={classes.textField}
                 autoComplete="current-password"
               />
               <Button
-                disabled={!formState.isValid || formState.isSubmitting}
+                disabled={
+                  !formState.isValid || formState.isSubmitting
+                }
                 variant="contained"
                 fullWidth
                 color="primary"
@@ -80,6 +115,7 @@ function LoginPage() {
                 Log In
               </Button>
             </form>
+            <AuthError error={error} />
             <div className={classes.orContainer}>
               <div className={classes.orLine} />
               <div>
@@ -118,12 +154,58 @@ function LoginPage() {
   );
 }
 
+function AuthError({ error }) {
+  return (
+    Boolean(error) && (
+      <Typography
+        align="center"
+        gutterBottom
+        variant="body2"
+        style={{ color: 'red' }}
+      >
+        {error}
+      </Typography>
+    )
+  );
+}
+
 export function LoginWithFacebook({ color, iconColor, variant }) {
+  // const loginWithFacebook = useContext(AuthContext);
   const classes = useLoginPageStyles();
   const facebookIcon =
     iconColor === 'blue' ? FacebookIconBlue : FacebookIconWhite;
+
+  async function onFacebook() {
+    // const provider = new firebase.auth.FacebookAuthProvider();
+    // firebase
+    //   .auth()
+    //   .signInWithPopup(provider)
+    //   .then(function (result) {
+    //     // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+    //     var token = result.credential.accessToken;
+    //     // The signed-in user info.
+    //     var user = result.user;
+    //     // ...
+    //   })
+    //   .catch(function (error) {
+    //     // Handle Errors here.
+    //     var errorCode = error.code;
+    //     var errorMessage = error.message;
+    //     // The email of the user's account used.
+    //     var email = error.email;
+    //     // The firebase.auth.AuthCredential type that was used.
+    //     var credential = error.credential;
+    //     // ...
+    //   });
+  }
+
   return (
-    <Button variant={variant} fullWidth color={color}>
+    <Button
+      onClick={onFacebook}
+      variant={variant}
+      fullWidth
+      color={color}
+    >
       <img
         src={facebookIcon}
         alt="Facebook icon"
