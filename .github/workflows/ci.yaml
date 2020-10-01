@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # name: InstaCI
 
 # on: 
@@ -24,30 +23,3 @@
 #       - name: Deploy to the Staging
 #         if: github.event_name == 'push'
 #         run: npx surge --project ./build --domain 
-=======
-name: InstaCI
-
-on: 
-  pull_request:
-    branches: [dev]
-  push:
-    branches: [dev]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Use NodeJS
-        uses: actions/setup-node@v1
-        with:
-          node-version: "12.x"  
-      - run: npm ci
-      - name: Build Project
-        if: github.event_name == 'push'
-        run: npm run build
-      - run: npm install -g surge
-      - name: Deploy to the Staging
-        if: github.event_name == 'push'
-        run: npx surge --project ./build --domain 
->>>>>>> 3fae9556566e198a8e7fd3902221d9b98931eb6d
