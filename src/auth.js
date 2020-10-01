@@ -19,7 +19,10 @@ firebase.initializeApp({
   appId: process.env.REACT_APP_FIREBASE_appId,
   measurementId: process.env.REACT_APP_FIREBASE_measurementId,
 });
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3fae9556566e198a8e7fd3902221d9b98931eb6d
 export const AuthContext = createContext();
 
 function AuthProvider({ children }) {
@@ -80,21 +83,27 @@ function AuthProvider({ children }) {
     }
   }
 
+<<<<<<< HEAD
   async function updateEmail(email) {
     await authState.user.updateEmail(email)
     console.log(authState.user)
   }
 
+=======
+>>>>>>> 3fae9556566e198a8e7fd3902221d9b98931eb6d
   async function logInWithEmailAndPassword(email, password) {
     return await firebase
       .auth()
       .signInWithEmailAndPassword(email, password);
   }
 
+<<<<<<< HEAD
   async function logInWithFacebook() {
     return await firebase.auth.FacebookAuthProvider()
   }
 
+=======
+>>>>>>> 3fae9556566e198a8e7fd3902221d9b98931eb6d
   async function signOut() {
     setAuthState({ status: 'loading' });
     await firebase.auth().signOut();
@@ -111,9 +120,13 @@ function AuthProvider({ children }) {
           signInWithGoogle,
           signOut,
           signUpWithEmailAndPassword,
+<<<<<<< HEAD
           logInWithEmailAndPassword,
           logInWithFacebook,
           updateEmail
+=======
+          logInWithEmailAndPassword
+>>>>>>> 3fae9556566e198a8e7fd3902221d9b98931eb6d
         }}
       >
         {children}

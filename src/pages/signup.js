@@ -1,4 +1,8 @@
 import React, { useContext, useState } from 'react';
+<<<<<<< HEAD
+=======
+import { useHistory } from 'react-router-dom';
+>>>>>>> 3fae9556566e198a8e7fd3902221d9b98931eb6d
 import { useSignUpPageStyles } from '../styles';
 import SEO from '../components/shared/Seo';
 import {
@@ -15,7 +19,11 @@ import { HighlightOff, CheckCircleOutline } from '@material-ui/icons';
 import { useForm } from 'react-hook-form';
 import isEmail from 'validator/lib/isEmail';
 import { useApolloClient } from '@apollo/react-hooks';
+<<<<<<< HEAD
 import { CHECK_IF_USERNAME_TAKEN } from '../graphql/queries.js';
+=======
+import { CHECK_IF_USERNAME_TAKEN } from '../graphql/queries.js'
+>>>>>>> 3fae9556566e198a8e7fd3902221d9b98931eb6d
 
 function SignUpPage() {
   const classes = useSignUpPageStyles();
@@ -23,6 +31,7 @@ function SignUpPage() {
     mode: 'onBlur',
   });
   const { signUpWithEmailAndPassword } = useContext(AuthContext);
+<<<<<<< HEAD
   const [error, setError] = useState('');
   const client = useApolloClient();
 
@@ -33,24 +42,53 @@ function SignUpPage() {
       window.location = '/';
     } catch (error) {
       handleError(error);
+=======
+  const history = useHistory();
+  const [error, setError] = useState('');
+  const client = useApolloClient()
+
+  async function onSubmit(data) {
+    try {
+      setError('')
+      await signUpWithEmailAndPassword(data);
+      history.push('/');
+    } catch (error) {
+      handleError(error)
+>>>>>>> 3fae9556566e198a8e7fd3902221d9b98931eb6d
     }
   }
 
   function handleError(error) {
+<<<<<<< HEAD
     if (error.message.includes('users_username_key')) {
       setError('Username already taken');
     } else if (error.code.includes('auth')) {
       setError(error.message);
+=======
+    if(error.message.includes("users_username_key")) {
+      setError('Username already taken')
+    } else if (error.code.includes('auth')) {
+      setError(error.message)
+>>>>>>> 3fae9556566e198a8e7fd3902221d9b98931eb6d
     }
   }
 
   async function validateUsername(username) {
+<<<<<<< HEAD
     const variables = { username };
     const response = await client.query({
       query: CHECK_IF_USERNAME_TAKEN,
       variables,
     });
     return response.data.users.length === 0;
+=======
+    const variables = { username }
+    const response = await client.query({
+      query: CHECK_IF_USERNAME_TAKEN,
+      variables
+    })
+    return response.data.users.length === 0
+>>>>>>> 3fae9556566e198a8e7fd3902221d9b98931eb6d
   }
 
   const errorIcon = (
@@ -137,8 +175,12 @@ function SignUpPage() {
                   minLength: 5,
                   maxLength: 25,
                   pattern: /^[a-zA-Z0-9_.]*$/,
+<<<<<<< HEAD
                   validate: async (input) =>
                     await validateUsername(input),
+=======
+                  validate: async (input) => await validateUsername(input)
+>>>>>>> 3fae9556566e198a8e7fd3902221d9b98931eb6d
                 })}
                 InputProps={{
                   endAdornment: errors.username

@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { useLoginPageStyles } from '../styles';
 import SEO from '../components/shared/Seo';
+<<<<<<< HEAD
 import {
   CardHeader,
   InputAdornment,
@@ -9,11 +10,17 @@ import {
 } from '@material-ui/core';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+=======
+import { CardHeader, InputAdornment, TextField, Typography } from '@material-ui/core';
+import { useForm } from 'react-hook-form'
+import { Link, useHistory } from 'react-router-dom';
+>>>>>>> 3fae9556566e198a8e7fd3902221d9b98931eb6d
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import FacebookIconBlue from '../images/facebook-icon-blue.svg';
 import FacebookIconWhite from '../images/facebook-icon-white.png';
 import { AuthContext } from '../auth';
+<<<<<<< HEAD
 import isEmail from 'validator/lib/isEmail';
 import { useApolloClient } from '@apollo/react-hooks';
 import { GET_USER_EMAIL } from '../graphql/queries';
@@ -57,7 +64,26 @@ function LoginPage() {
   function togglePasswordVisiblity() {
     setPassword((prev) => !prev);
   }
+=======
 
+function LoginPage() {
+  const classes = useLoginPageStyles();
+  const { logInWithEmailAndPassword } =  useContext(AuthContext)
+  const { register, handleSubmit, watch, formState } = useForm({ mode: 'onBlur' })
+  const [showPassword, setPassword] = useState(false)
+  const hasPassword = Boolean(watch('password'))
+  const history = useHistory()
+>>>>>>> 3fae9556566e198a8e7fd3902221d9b98931eb6d
+
+  async function onSubmit(data) {
+    await logInWithEmailAndPassword(data.input, data.password)
+    history.push('/')
+  }
+
+  function togglePasswordVisiblity() {
+    setPassword(prev => !prev)
+  }
+  
   return (
     <>
       <SEO title="Login" />
@@ -70,7 +96,11 @@ function LoginPage() {
                 fullWidth
                 inputRef={register({
                   required: true,
+<<<<<<< HEAD
                   minLength: 5,
+=======
+                  minLength: 5
+>>>>>>> 3fae9556566e198a8e7fd3902221d9b98931eb6d
                 })}
                 name="input"
                 variant="filled"
@@ -83,12 +113,17 @@ function LoginPage() {
                 fullWidth
                 inputRef={register({
                   required: true,
+<<<<<<< HEAD
                   minLength: 5,
+=======
+                  minLength: 5
+>>>>>>> 3fae9556566e198a8e7fd3902221d9b98931eb6d
                 })}
                 name="password"
                 InputProps={{
                   endAdornment: hasPassword && (
                     <InputAdornment>
+<<<<<<< HEAD
                       <Button onClick={togglePasswordVisiblity}>
                         {showPassword ? 'Hide' : 'Show'}
                       </Button>
@@ -98,14 +133,27 @@ function LoginPage() {
                 variant="filled"
                 label="Password"
                 type={showPassword ? 'text' : 'password'}
+=======
+                      <Button onClick={togglePasswordVisiblity}>{showPassword ? "Hide" : "Show"}</Button>
+                    </InputAdornment>
+                  )
+                }}
+                variant="filled"
+                label="Password"
+                type={showPassword ? "text" : "password"}
+>>>>>>> 3fae9556566e198a8e7fd3902221d9b98931eb6d
                 margin="dense"
                 className={classes.textField}
                 autoComplete="current-password"
               />
               <Button
+<<<<<<< HEAD
                 disabled={
                   !formState.isValid || formState.isSubmitting
                 }
+=======
+                disabled={!formState.isValid || formState.isSubmitting}
+>>>>>>> 3fae9556566e198a8e7fd3902221d9b98931eb6d
                 variant="contained"
                 fullWidth
                 color="primary"
@@ -152,6 +200,7 @@ function LoginPage() {
       </section>
     </>
   );
+<<<<<<< HEAD
 }
 
 function AuthError({ error }) {
@@ -206,6 +255,16 @@ export function LoginWithFacebook({ color, iconColor, variant }) {
       fullWidth
       color={color}
     >
+=======
+}
+
+export function LoginWithFacebook({ color, iconColor, variant }) {
+  const classes = useLoginPageStyles();
+  const facebookIcon =
+    iconColor === 'blue' ? FacebookIconBlue : FacebookIconWhite;
+  return (
+    <Button variant={variant} fullWidth color={color}>
+>>>>>>> 3fae9556566e198a8e7fd3902221d9b98931eb6d
       <img
         src={facebookIcon}
         alt="Facebook icon"
