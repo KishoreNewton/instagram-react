@@ -16,9 +16,13 @@
     "firebase": "^7.21.1",
     "graphql": "^14.7.0",
 <<<<<<< HEAD
+<<<<<<< HEAD
     "node-forge": "^0.10.0",
 =======
 >>>>>>> 3fae9556566e198a8e7fd3902221d9b98931eb6d
+=======
+    "node-forge": "^0.10.0",
+>>>>>>> 88b44a5dedb6923f85525a06a3c93c62e94fe3bd
     "react": "^16.13.1",
     "react-apollo": "^3.1.5",
     "react-dom": "^16.13.1",

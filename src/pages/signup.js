@@ -1,8 +1,11 @@
 import React, { useContext, useState } from 'react';
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import { useHistory } from 'react-router-dom';
 >>>>>>> 3fae9556566e198a8e7fd3902221d9b98931eb6d
+=======
+>>>>>>> 88b44a5dedb6923f85525a06a3c93c62e94fe3bd
 import { useSignUpPageStyles } from '../styles';
 import SEO from '../components/shared/Seo';
 import {
@@ -20,10 +23,14 @@ import { useForm } from 'react-hook-form';
 import isEmail from 'validator/lib/isEmail';
 import { useApolloClient } from '@apollo/react-hooks';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { CHECK_IF_USERNAME_TAKEN } from '../graphql/queries.js';
 =======
 import { CHECK_IF_USERNAME_TAKEN } from '../graphql/queries.js'
 >>>>>>> 3fae9556566e198a8e7fd3902221d9b98931eb6d
+=======
+import { CHECK_IF_USERNAME_TAKEN } from '../graphql/queries.js';
+>>>>>>> 88b44a5dedb6923f85525a06a3c93c62e94fe3bd
 
 function SignUpPage() {
   const classes = useSignUpPageStyles();
@@ -31,6 +38,7 @@ function SignUpPage() {
     mode: 'onBlur',
   });
   const { signUpWithEmailAndPassword } = useContext(AuthContext);
+<<<<<<< HEAD
 <<<<<<< HEAD
   const [error, setError] = useState('');
   const client = useApolloClient();
@@ -44,21 +52,28 @@ function SignUpPage() {
       handleError(error);
 =======
   const history = useHistory();
+=======
+>>>>>>> 88b44a5dedb6923f85525a06a3c93c62e94fe3bd
   const [error, setError] = useState('');
-  const client = useApolloClient()
+  const client = useApolloClient();
 
   async function onSubmit(data) {
     try {
-      setError('')
+      setError('');
       await signUpWithEmailAndPassword(data);
-      history.push('/');
+      window.location = '/';
     } catch (error) {
+<<<<<<< HEAD
       handleError(error)
 >>>>>>> 3fae9556566e198a8e7fd3902221d9b98931eb6d
+=======
+      handleError(error);
+>>>>>>> 88b44a5dedb6923f85525a06a3c93c62e94fe3bd
     }
   }
 
   function handleError(error) {
+<<<<<<< HEAD
 <<<<<<< HEAD
     if (error.message.includes('users_username_key')) {
       setError('Username already taken');
@@ -70,10 +85,17 @@ function SignUpPage() {
     } else if (error.code.includes('auth')) {
       setError(error.message)
 >>>>>>> 3fae9556566e198a8e7fd3902221d9b98931eb6d
+=======
+    if (error.message.includes('users_username_key')) {
+      setError('Username already taken');
+    } else if (error.code.includes('auth')) {
+      setError(error.message);
+>>>>>>> 88b44a5dedb6923f85525a06a3c93c62e94fe3bd
     }
   }
 
   async function validateUsername(username) {
+<<<<<<< HEAD
 <<<<<<< HEAD
     const variables = { username };
     const response = await client.query({
@@ -89,6 +111,14 @@ function SignUpPage() {
     })
     return response.data.users.length === 0
 >>>>>>> 3fae9556566e198a8e7fd3902221d9b98931eb6d
+=======
+    const variables = { username };
+    const response = await client.query({
+      query: CHECK_IF_USERNAME_TAKEN,
+      variables,
+    });
+    return response.data.users.length === 0;
+>>>>>>> 88b44a5dedb6923f85525a06a3c93c62e94fe3bd
   }
 
   const errorIcon = (
@@ -176,11 +206,16 @@ function SignUpPage() {
                   maxLength: 25,
                   pattern: /^[a-zA-Z0-9_.]*$/,
 <<<<<<< HEAD
+<<<<<<< HEAD
                   validate: async (input) =>
                     await validateUsername(input),
 =======
                   validate: async (input) => await validateUsername(input)
 >>>>>>> 3fae9556566e198a8e7fd3902221d9b98931eb6d
+=======
+                  validate: async (input) =>
+                    await validateUsername(input),
+>>>>>>> 88b44a5dedb6923f85525a06a3c93c62e94fe3bd
                 })}
                 InputProps={{
                   endAdornment: errors.username
