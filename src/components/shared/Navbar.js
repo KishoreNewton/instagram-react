@@ -202,6 +202,10 @@ function Links({ path }) {
     setAddPostDialog(true)
   }
 
+  function handleClose() {
+    setAddPostDialog(false)
+  }
+
   return (
     <>
       <div className={classes.linksContainer}>
@@ -210,7 +214,7 @@ function Links({ path }) {
         )}
         <div className={classes.linksWrapper}>
           {showAddPostDialog && (
-            <AddPostDialg />
+            <AddPostDialg media={media} handleClose={handleClose}  />
           )}
           <Hidden xsDown>
             <input 
