@@ -8,7 +8,7 @@ import {
   Typography,
   Zoom,
 } from '@material-ui/core';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   useNavbarStyles,
   WhiteTooltip,
@@ -27,9 +27,12 @@ import {
   HomeActiveIcon,
 } from '../../icons';
 import NotificationTooltip from '../notification/NotificationTooltip';
-import { defaultCurrentUser, getDefaultUser } from '../../data';
+import { defaultCurrentUser } from '../../data';
 import NotificationList from '../notification/NotificationList';
 import { useNProgress } from '@tanem/react-nprogress';
+import { useLazyQuery } from '@apollo/react-hooks';
+import { SEARCH_USERS } from '../../graphql/queries'
+import { UserContext } from '../../App';
 
 function Navbar({ minimalNavbar }) {
   const classes = useNavbarStyles();
@@ -77,9 +80,10 @@ function Logo() {
 
 function Search({ history }) {
   const classes = useNavbarStyles();
-  const [loading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
+  const [searchUsers, { data }] = useLazyQuery(SEARCH_USERS)
 
   const hasResults = Boolean(query) && results.length > 0;
 
@@ -89,8 +93,14 @@ function Search({ history }) {
 
   useEffect(() => {
     if (!query.trim()) return;
-    setResults(Array.from({ length: 5 }, () => getDefaultUser()));
-  }, [query]);
+    setLoading(true)
+    const variables = { input: `%${query}%` }
+    searchUsers({ variables })
+    if(data) {
+      setResults(data.users)
+      setLoading(false)
+    }
+  }, [query, data, searchUsers]);
 
   return (
     <>
@@ -161,6 +171,7 @@ function Search({ history }) {
 }
 
 function Links({ path }) {
+  const { me } =useContext(UserContext)
   const classes = useNavbarStyles();
   const [showList, setList] = useState(false);
   const [showTooltip, setTooltip] = useState(true);
@@ -227,7 +238,7 @@ function Links({ path }) {
               }
             ></div>
             <Avatar
-              src={defaultCurrentUser.profile_image}
+              src={me.profile_image}
               className={classes.profileImage}
             />
           </Link>
