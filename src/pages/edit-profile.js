@@ -28,7 +28,7 @@ import { useForm } from 'react-hook-form';
 import isURL from 'validator/lib/isURL';
 import isEmail from 'validator/lib/isEmail';
 import isMobilePhone from 'validator/lib/isMobilePhone'
-import { EDIT_USER } from '../graphql/mutations';
+import { EDIT_USER, EDIT_USER_AVATAR } from '../graphql/mutations';
 import { AuthContext } from '../auth';
 import handleImageUpload from '../utils/handleImageUpload'
 
@@ -156,8 +156,10 @@ function EditUserInfo({ user }) {
   const { register, handleSubmit } = useForm({ mode: 'onBlur' });
   const { updateEmail } = useContext(AuthContext)
   const [editUser] = useMutation(EDIT_USER)
+  const [profileImage, setProfileImage] = useState(user.profile_image)
   const [error, setError] = useState(DEFAULT_ERROR)
   const [open, setOpen] = useState(false)
+  const [editUserAvatar] = useMutation(EDIT_USER_AVATAR)
 
   async function onSubmit(data) {
     try {
@@ -182,7 +184,9 @@ function EditUserInfo({ user }) {
 
   async function handleUpdateProfilePic(event) {
     const url = await handleImageUpload(event.target.files[0])
-    console.log(url)
+    const variables = { id: user.id, profileImage: url }
+    await editUserAvatar({ variables })
+    setProfileImage(url)
   }
   
   const theme = createMuiTheme({
@@ -197,7 +201,7 @@ function EditUserInfo({ user }) {
   return (
     <section className={classes.container}>
       <div className={classes.pictureSectionItem}>
-        <ProfilePicture size={38} image={user.profile_image} />
+        <ProfilePicture size={38} image={profileImage} />
         <div className={classes.justifySelfStart}>
           <Typography className={classes.typography}>
             {user.username}
