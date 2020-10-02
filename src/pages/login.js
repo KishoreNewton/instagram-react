@@ -1,10 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { useLoginPageStyles } from '../styles';
 import SEO from '../components/shared/Seo';
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 88b44a5dedb6923f85525a06a3c93c62e94fe3bd
 import {
   CardHeader,
   InputAdornment,
@@ -13,21 +9,11 @@ import {
 } from '@material-ui/core';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
-<<<<<<< HEAD
-=======
-import { CardHeader, InputAdornment, TextField, Typography } from '@material-ui/core';
-import { useForm } from 'react-hook-form'
-import { Link, useHistory } from 'react-router-dom';
->>>>>>> 3fae9556566e198a8e7fd3902221d9b98931eb6d
-=======
->>>>>>> 88b44a5dedb6923f85525a06a3c93c62e94fe3bd
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import FacebookIconBlue from '../images/facebook-icon-blue.svg';
 import FacebookIconWhite from '../images/facebook-icon-white.png';
 import { AuthContext } from '../auth';
-<<<<<<< HEAD
-<<<<<<< HEAD
 import isEmail from 'validator/lib/isEmail';
 import { useApolloClient } from '@apollo/react-hooks';
 import { GET_USER_EMAIL } from '../graphql/queries';
@@ -42,61 +28,6 @@ function LoginPage() {
   const [error, setError] = useState('');
   const hasPassword = Boolean(watch('password'));
   const client = useApolloClient();
-
-  async function onSubmit(data) {
-    if (!isEmail(data.input)) {
-      data.input = await getUserEmail(data.input);
-    }
-    try {
-      await logInWithEmailAndPassword(data.input, data.password);
-      window.location = '/';
-    } catch (error) {
-      handleError(error);
-    }
-  }
-
-  async function getUserEmail(input) {
-    const variables = { input };
-    const response = await client.query({
-      query: GET_USER_EMAIL,
-      variables,
-    });
-    return response.data.users[0]?.email || 'no@notfound.com';
-  }
-
-  function handleError(error) {
-    if (error.code.includes('auth')) setError(error.message);
-  }
-
-  function togglePasswordVisiblity() {
-    setPassword((prev) => !prev);
-  }
-=======
-
-function LoginPage() {
-  const classes = useLoginPageStyles();
-  const { logInWithEmailAndPassword } =  useContext(AuthContext)
-  const { register, handleSubmit, watch, formState } = useForm({ mode: 'onBlur' })
-  const [showPassword, setPassword] = useState(false)
-  const hasPassword = Boolean(watch('password'))
-  const history = useHistory()
->>>>>>> 3fae9556566e198a8e7fd3902221d9b98931eb6d
-=======
-import isEmail from 'validator/lib/isEmail';
-import { useApolloClient } from '@apollo/react-hooks';
-import { GET_USER_EMAIL } from '../graphql/queries';
-
-function LoginPage() {
-  const classes = useLoginPageStyles();
-  const { logInWithEmailAndPassword } = useContext(AuthContext);
-  const { register, handleSubmit, watch, formState } = useForm({
-    mode: 'onBlur',
-  });
-  const [showPassword, setPassword] = useState(false);
-  const [error, setError] = useState('');
-  const hasPassword = Boolean(watch('password'));
-  const client = useApolloClient();
->>>>>>> 88b44a5dedb6923f85525a06a3c93c62e94fe3bd
 
   async function onSubmit(data) {
     if (!isEmail(data.input)) {
@@ -139,15 +70,7 @@ function LoginPage() {
                 fullWidth
                 inputRef={register({
                   required: true,
-<<<<<<< HEAD
-<<<<<<< HEAD
                   minLength: 5,
-=======
-                  minLength: 5
->>>>>>> 3fae9556566e198a8e7fd3902221d9b98931eb6d
-=======
-                  minLength: 5,
->>>>>>> 88b44a5dedb6923f85525a06a3c93c62e94fe3bd
                 })}
                 name="input"
                 variant="filled"
@@ -160,22 +83,12 @@ function LoginPage() {
                 fullWidth
                 inputRef={register({
                   required: true,
-<<<<<<< HEAD
-<<<<<<< HEAD
                   minLength: 5,
-=======
-                  minLength: 5
->>>>>>> 3fae9556566e198a8e7fd3902221d9b98931eb6d
-=======
-                  minLength: 5,
->>>>>>> 88b44a5dedb6923f85525a06a3c93c62e94fe3bd
                 })}
                 name="password"
                 InputProps={{
                   endAdornment: hasPassword && (
                     <InputAdornment>
-<<<<<<< HEAD
-<<<<<<< HEAD
                       <Button onClick={togglePasswordVisiblity}>
                         {showPassword ? 'Hide' : 'Show'}
                       </Button>
@@ -185,42 +98,14 @@ function LoginPage() {
                 variant="filled"
                 label="Password"
                 type={showPassword ? 'text' : 'password'}
-=======
-                      <Button onClick={togglePasswordVisiblity}>{showPassword ? "Hide" : "Show"}</Button>
-=======
-                      <Button onClick={togglePasswordVisiblity}>
-                        {showPassword ? 'Hide' : 'Show'}
-                      </Button>
->>>>>>> 88b44a5dedb6923f85525a06a3c93c62e94fe3bd
-                    </InputAdornment>
-                  ),
-                }}
-                variant="filled"
-                label="Password"
-<<<<<<< HEAD
-                type={showPassword ? "text" : "password"}
->>>>>>> 3fae9556566e198a8e7fd3902221d9b98931eb6d
-=======
-                type={showPassword ? 'text' : 'password'}
->>>>>>> 88b44a5dedb6923f85525a06a3c93c62e94fe3bd
                 margin="dense"
                 className={classes.textField}
                 autoComplete="current-password"
               />
               <Button
-<<<<<<< HEAD
-<<<<<<< HEAD
                 disabled={
                   !formState.isValid || formState.isSubmitting
                 }
-=======
-                disabled={!formState.isValid || formState.isSubmitting}
->>>>>>> 3fae9556566e198a8e7fd3902221d9b98931eb6d
-=======
-                disabled={
-                  !formState.isValid || formState.isSubmitting
-                }
->>>>>>> 88b44a5dedb6923f85525a06a3c93c62e94fe3bd
                 variant="contained"
                 fullWidth
                 color="primary"
@@ -267,7 +152,6 @@ function LoginPage() {
       </section>
     </>
   );
-<<<<<<< HEAD
 }
 
 function AuthError({ error }) {
@@ -322,66 +206,6 @@ export function LoginWithFacebook({ color, iconColor, variant }) {
       fullWidth
       color={color}
     >
-=======
-}
-
-function AuthError({ error }) {
-  return (
-    Boolean(error) && (
-      <Typography
-        align="center"
-        gutterBottom
-        variant="body2"
-        style={{ color: 'red' }}
-      >
-        {error}
-      </Typography>
-    )
-  );
-}
-
-export function LoginWithFacebook({ color, iconColor, variant }) {
-  // const loginWithFacebook = useContext(AuthContext);
-  const classes = useLoginPageStyles();
-  const facebookIcon =
-    iconColor === 'blue' ? FacebookIconBlue : FacebookIconWhite;
-
-  async function onFacebook() {
-    // const provider = new firebase.auth.FacebookAuthProvider();
-    // firebase
-    //   .auth()
-    //   .signInWithPopup(provider)
-    //   .then(function (result) {
-    //     // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-    //     var token = result.credential.accessToken;
-    //     // The signed-in user info.
-    //     var user = result.user;
-    //     // ...
-    //   })
-    //   .catch(function (error) {
-    //     // Handle Errors here.
-    //     var errorCode = error.code;
-    //     var errorMessage = error.message;
-    //     // The email of the user's account used.
-    //     var email = error.email;
-    //     // The firebase.auth.AuthCredential type that was used.
-    //     var credential = error.credential;
-    //     // ...
-    //   });
-  }
-
-  return (
-<<<<<<< HEAD
-    <Button variant={variant} fullWidth color={color}>
->>>>>>> 3fae9556566e198a8e7fd3902221d9b98931eb6d
-=======
-    <Button
-      onClick={onFacebook}
-      variant={variant}
-      fullWidth
-      color={color}
-    >
->>>>>>> 88b44a5dedb6923f85525a06a3c93c62e94fe3bd
       <img
         src={facebookIcon}
         alt="Facebook icon"
