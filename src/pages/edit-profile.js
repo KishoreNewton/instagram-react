@@ -30,6 +30,7 @@ import isEmail from 'validator/lib/isEmail';
 import isMobilePhone from 'validator/lib/isMobilePhone'
 import { EDIT_USER } from '../graphql/mutations';
 import { AuthContext } from '../auth';
+import handleImageUpload from '../utils/handleImageUpload'
 
 function EditProfilePage({ history }) {
   const { currentUserId } = useContext(UserContext);
@@ -40,6 +41,8 @@ function EditProfilePage({ history }) {
   const path = history.location.pathname;
   const classes = useEditProfilePageStyles();
   const [showDrawer, setDrawer] = useState(false);
+
+  console.log(process.env.REACT_APP_CLOUD_NAME)
 
   if (loading) return <LoadingScreen />;
 
@@ -171,10 +174,15 @@ function EditUserInfo({ user }) {
 
   function handleError(error) {
     if(error.message.includes("users_username_key")) {
-      setError({ type: "username", message: "This username is already taken." })
+      setError({ type: "username", message: "This username is already taken." })    
     } else if (error.code.includes("auth")) {
       setError({ type: "email", message: error.message })
     }
+  }
+
+  async function handleUpdateProfilePic(event) {
+    const url = await handleImageUpload(event.target.files[0])
+    console.log(url)
   }
   
   const theme = createMuiTheme({
@@ -194,13 +202,17 @@ function EditUserInfo({ user }) {
           <Typography className={classes.typography}>
             {user.username}
           </Typography>
-          <Typography
-            color="primary"
-            variant="body2"
-            className={classes.typographyChangePic}
-          >
-            Change Profile Photo
-          </Typography>
+          <input accept="image/*" id="image" type="file" style={{display: 'none'}} onChange={handleUpdateProfilePic} />
+          <label htmlFor="image" >
+            <Typography
+              color="primary"
+              variant="body2"
+              className={classes.typographyChangePic}
+            >
+              
+              Change Profile Photo
+            </Typography>
+          </label>
         </div>
       </div>
       <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
