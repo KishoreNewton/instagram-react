@@ -27,7 +27,6 @@ import {
   HomeActiveIcon,
 } from '../../icons';
 import NotificationTooltip from '../notification/NotificationTooltip';
-// import { defaultCurrentUser } from '../../data';
 import NotificationList from '../notification/NotificationList';
 import { useNProgress } from '@tanem/react-nprogress';
 import { useLazyQuery } from '@apollo/react-hooks';
