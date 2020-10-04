@@ -18,7 +18,7 @@ import {
   MuiThemeProvider,
   createMuiTheme,
 } from '@material-ui/core/styles';
-import {  Menu } from '@material-ui/icons';
+import { Menu } from '@material-ui/icons';
 import ProfilePicture from '../components/shared/ProfilePicture';
 import { UserContext } from '../App';
 import { useMutation, useQuery } from '@apollo/react-hooks';
@@ -27,10 +27,10 @@ import LoadingScreen from '../components/shared/LoadingScreen';
 import { useForm } from 'react-hook-form';
 import isURL from 'validator/lib/isURL';
 import isEmail from 'validator/lib/isEmail';
-import isMobilePhone from 'validator/lib/isMobilePhone'
+import isMobilePhone from 'validator/lib/isMobilePhone';
 import { EDIT_USER, EDIT_USER_AVATAR } from '../graphql/mutations';
 import { AuthContext } from '../auth';
-import handleImageUpload from '../utils/handleImageUpload'
+import handleImageUpload from '../utils/handleImageUpload';
 
 function EditProfilePage({ history }) {
   const { currentUserId } = useContext(UserContext);
@@ -42,7 +42,7 @@ function EditProfilePage({ history }) {
   const classes = useEditProfilePageStyles();
   const [showDrawer, setDrawer] = useState(false);
 
-  console.log(process.env.REACT_APP_CLOUD_NAME)
+  console.log(process.env.REACT_APP_CLOUD_NAME);
 
   if (loading) return <LoadingScreen />;
 
@@ -149,46 +149,51 @@ function EditProfilePage({ history }) {
   );
 }
 
-const DEFAULT_ERROR = { type: "", message: "" }
+const DEFAULT_ERROR = { type: '', message: '' };
 
 function EditUserInfo({ user }) {
   const classes = useEditProfilePageStyles();
   const { register, handleSubmit } = useForm({ mode: 'onBlur' });
-  const { updateEmail } = useContext(AuthContext)
-  const [editUser] = useMutation(EDIT_USER)
-  const [profileImage, setProfileImage] = useState(user.profile_image)
-  const [error, setError] = useState(DEFAULT_ERROR)
-  const [open, setOpen] = useState(false)
-  const [editUserAvatar] = useMutation(EDIT_USER_AVATAR)
+  const { updateEmail } = useContext(AuthContext);
+  const [editUser] = useMutation(EDIT_USER);
+  const [profileImage, setProfileImage] = useState(
+    user.profile_image,
+  );
+  const [error, setError] = useState(DEFAULT_ERROR);
+  const [open, setOpen] = useState(false);
+  const [editUserAvatar] = useMutation(EDIT_USER_AVATAR);
 
   async function onSubmit(data) {
     try {
-      setError(DEFAULT_ERROR)
-      const variables = { ...data, id: user.id }
-      await updateEmail(data.email)
-      await editUser({ variables })
-      setOpen(true)
-    } catch(error) {
-      console.log("Error updating profile", error)
-      handleError(error)
+      setError(DEFAULT_ERROR);
+      const variables = { ...data, id: user.id };
+      await updateEmail(data.email);
+      await editUser({ variables });
+      setOpen(true);
+    } catch (error) {
+      console.log('Error updating profile', error);
+      handleError(error);
     }
   }
 
   function handleError(error) {
-    if(error.message.includes("users_username_key")) {
-      setError({ type: "username", message: "This username is already taken." })    
-    } else if (error.code.includes("auth")) {
-      setError({ type: "email", message: error.message })
+    if (error.message.includes('users_username_key')) {
+      setError({
+        type: 'username',
+        message: 'This username is already taken.',
+      });
+    } else if (error.code.includes('auth')) {
+      setError({ type: 'email', message: error.message });
     }
   }
 
   async function handleUpdateProfilePic(event) {
-    const url = await handleImageUpload(event.target.files[0])
-    const variables = { id: user.id, profileImage: url }
-    await editUserAvatar({ variables })
-    setProfileImage(url)
+    const url = await handleImageUpload(event.target.files[0]);
+    const variables = { id: user.id, profileImage: url };
+    await editUserAvatar({ variables });
+    setProfileImage(url);
   }
-  
+
   const theme = createMuiTheme({
     typography: {
       fontSize: 12,
@@ -206,20 +211,28 @@ function EditUserInfo({ user }) {
           <Typography className={classes.typography}>
             {user.username}
           </Typography>
-          <input accept="image/*" id="image" type="file" style={{display: 'none'}} onChange={handleUpdateProfilePic} />
-          <label htmlFor="image" >
+          <input
+            accept="image/*"
+            id="image"
+            type="file"
+            style={{ display: 'none' }}
+            onChange={handleUpdateProfilePic}
+          />
+          <label htmlFor="image">
             <Typography
               color="primary"
               variant="body2"
               className={classes.typographyChangePic}
             >
-              
               Change Profile Photo
             </Typography>
           </label>
         </div>
       </div>
-      <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
+      <form
+        className={classes.form}
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <SectionItem
           name="name"
           inputRef={register({
@@ -271,7 +284,7 @@ function EditUserInfo({ user }) {
           <TextField
             name="bio"
             inputRef={register({
-              maxLength: 120
+              maxLength: 120,
             })}
             variant="outlined"
             multiline
@@ -295,7 +308,7 @@ function EditUserInfo({ user }) {
           error={error}
           inputRef={register({
             required: true,
-            validate: (input) => isEmail(input)
+            validate: (input) => isEmail(input),
           })}
           text="Email"
           formItem={user.email}
@@ -305,7 +318,8 @@ function EditUserInfo({ user }) {
           name="phoneNumber"
           inputRef={register({
             required: false,
-            validate: input => Boolean(input) ? isMobilePhone(input) : true
+            validate: (input) =>
+              Boolean(input) ? isMobilePhone(input) : true,
           })}
           text="Phone Number"
           formItem={user.phone_number}
@@ -322,7 +336,7 @@ function EditUserInfo({ user }) {
           </Button>
         </div>
       </form>
-      <Snackbar 
+      <Snackbar
         open={open}
         autoHideDuration={4000}
         TransitionComponent={Slide}
@@ -339,7 +353,7 @@ function SectionItem({
   formItem,
   inputRef,
   name,
-  error
+  error,
 }) {
   const classes = useEditProfilePageStyles();
 
