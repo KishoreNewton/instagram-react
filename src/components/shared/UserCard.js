@@ -4,7 +4,7 @@ import React from "react"
 import { defaultUser } from '../../data'
 import { useUserCardStyles } from "../../styles"
 
-function UserCard({ user = defaultUser, avatarSize = 44 }) {
+function UserCard({ user = defaultUser, avatarSize = 44, location }) {
   const classes = useUserCardStyles({ avatarSize })
   const { username, name, profile_image } = user
 
@@ -20,7 +20,7 @@ function UserCard({ user = defaultUser, avatarSize = 44 }) {
           </Typography>
         </Link>
         <Typography color="textSecondary" variant="body2" className={classes.typography}>
-          {name}
+          {location || name}
         </Typography>
       </div>
     </div>

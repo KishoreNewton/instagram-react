@@ -9,7 +9,7 @@ function PostPage() {
 
   return (
     <Layout>
-      <Post key={postId} />
+      <Post postId={postId} />
       <MorePostsFromUser />
     </Layout>
   )
