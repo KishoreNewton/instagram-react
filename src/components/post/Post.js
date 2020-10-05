@@ -24,7 +24,13 @@ import OptionsDialog from '../shared/OptionsDialog';
 import PostSkeleton from './PostSkeleton';
 import { useSubscription, useMutation } from '@apollo/react-hooks';
 import { GET_POST } from '../../graphql/subscriptions';
-import { LIKE_POST, UNLIKE_POST, SAVE_POST, UNSAVE_POST } from '../../graphql/mutations';
+import {
+  LIKE_POST,
+  UNLIKE_POST,
+  SAVE_POST,
+  UNSAVE_POST,
+  CREATE_COMMENT,
+} from '../../graphql/mutations';
 
 function Post({ postId }) {
   const classes = usePostStyles();
@@ -111,7 +117,7 @@ function Post({ postId }) {
           <Hidden xsDown>
             <div className={classes.comment}>
               <Divider />
-              <Comment />
+              <Comment postId={id} />
             </div>
           </Hidden>
         </div>
@@ -179,7 +185,7 @@ function UserComment({ comment }) {
   const classes = usePostStyles();
 
   return (
-    <div style={{ display: 'flex' }}>
+    <div style={{ display: 'flex', marginTop: 10 }}>
       <Avatar
         src={comment.user.profile_image}
         alt="User avatar"
@@ -189,7 +195,13 @@ function UserComment({ comment }) {
           height: 32,
         }}
       />
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          marginLeft: 10,
+        }}
+      >
         <Link to={`/${comment.user.username}`}>
           <Typography
             variant="subtitle2"
@@ -262,29 +274,41 @@ function SaveButton({ savedPosts, postId }) {
   const [saved, setSaved] = React.useState(isAlreadySaved);
   const Icon = saved ? RemoveIcon : SaveIcon;
   const onClick = saved ? handleRemove : handleSave;
-  const [savePost] = useMutation(SAVE_POST)
-  const [unsavePost] = useMutation(UNSAVE_POST)
+  const [savePost] = useMutation(SAVE_POST);
+  const [unsavePost] = useMutation(UNSAVE_POST);
   const variables = {
     postId,
-    userId: currentUserId
-  }
+    userId: currentUserId,
+  };
 
-  function handleSave() { 
+  function handleSave() {
     setSaved(true);
-    savePost({ variables })
+    savePost({ variables });
   }
 
   function handleRemove() {
     setSaved(false);
-    unsavePost({ variables })
+    unsavePost({ variables });
   }
 
   return <Icon onClick={onClick} className={classes.saveIcon} />;
 }
 
-function Comment() {
+function Comment({ postId }) {
   const classes = usePostStyles();
+  const { currentUserId } = useContext(UserContext);
   const [content, setContent] = React.useState('');
+  const [createComment] = useMutation(CREATE_COMMENT);
+
+  function handleAddComment() {
+    const variables = {
+      content,
+      postId,
+      userId: currentUserId,
+    };
+    createComment({ variables });
+  }
+
   return (
     <div className={classes.commentContainer}>
       <TextField
@@ -304,6 +328,7 @@ function Comment() {
         }}
       />
       <Button
+        onClick={handleAddComment}
         color="primary"
         className={classes.commentButton}
         disabled={!content.trim()}
