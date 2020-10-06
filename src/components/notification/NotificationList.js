@@ -5,21 +5,26 @@ import { Link } from 'react-router-dom';
 import FollowButton from '../shared/FollowButton';
 import useOutsideClick from '@rooks/use-outside-click';
 import { useMutation } from '@apollo/react-hooks';
-import { CHECK_NOTIFICATIONS } from '../../graphql/mutations'
+import { CHECK_NOTIFICATIONS } from '../../graphql/mutations';
+import { formatDateToNowShort } from '../../utils/formatData';
 
-function NotificationList({ handleHideList, notifications, currentUserId }) {
+function NotificationList({
+  handleHideList,
+  notifications,
+  currentUserId,
+}) {
   const listContainerRef = useRef();
   const classes = useNotificationListStyles();
   useOutsideClick(listContainerRef, handleHideList);
-  const [checkNotifications] = useMutation(CHECK_NOTIFICATIONS)
+  const [checkNotifications] = useMutation(CHECK_NOTIFICATIONS);
 
   useEffect(() => {
     const variables = {
       userId: currentUserId,
-      lastChecked: new Date().toISOString()
-    }
-    checkNotifications({ variables })
-  }, [currentUserId, checkNotifications])
+      lastChecked: new Date().toISOString(),
+    };
+    checkNotifications({ variables });
+  }, [currentUserId, checkNotifications]);
 
   return (
     <Grid
@@ -54,9 +59,9 @@ function NotificationList({ handleHideList, notifications, currentUserId }) {
                   className={classes.typography}
                 >
                   {isLike &&
-                    `likes your photo. ${notification.created_at}`}
+                    `likes your photo. ${formatDateToNowShort(notification.created_at)}`}
                   {isFollow &&
-                    `started following you. ${notification.created_at}`}
+                    `started following you. ${formatDateToNowShort(notification.created_at)}`}
                 </Typography>
               </div>
             </div>

@@ -31,6 +31,10 @@ import {
   UNSAVE_POST,
   CREATE_COMMENT,
 } from '../../graphql/mutations';
+import {
+  formatDateToNowShort,
+  formatPostDate,
+} from '../../utils/formatData';
 
 function Post({ postId }) {
   const classes = usePostStyles();
@@ -250,7 +254,7 @@ function LikeButton({ likes, authorId, postId }) {
   const variables = {
     postId,
     userId: currentUserId,
-    profileId: authorId
+    profileId: authorId,
   };
 
   function handleLike() {
