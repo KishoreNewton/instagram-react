@@ -250,6 +250,7 @@ function LikeButton({ likes, authorId, postId }) {
   const variables = {
     postId,
     userId: currentUserId,
+    profileId: authorId
   };
 
   function handleLike() {
@@ -307,6 +308,7 @@ function Comment({ postId }) {
       userId: currentUserId,
     };
     createComment({ variables });
+    setContent('');
   }
 
   return (
