@@ -51,11 +51,11 @@ function Post({ postId }) {
     likes,
     likes_aggregate,
     saved_posts,
+    created_at,
     user_id,
     user,
     caption,
     comments,
-    created_at,
     location,
   } = data.posts_by_pk;
   const likesCount = likes_aggregate.aggregate.count;
@@ -115,7 +115,7 @@ function Post({ postId }) {
             color="textSecondary"
             className={classes.datePosted}
           >
-            5 DAYS AGO
+            { formatPostDate(created_at) }
           </Typography>
 
           <Hidden xsDown>
@@ -178,7 +178,7 @@ function AuthorCaption({ user, caption, createdAt }) {
           color="textSecondary"
           variant="caption"
         >
-          {createdAt}
+          {formatDateToNowShort(createdAt)}
         </Typography>
       </div>
     </div>
@@ -232,7 +232,7 @@ function UserComment({ comment }) {
           color="textSecondary"
           variant="caption"
         >
-          {comment.created_at}
+          {formatDateToNowShort(comment.created_at)}
         </Typography>
       </div>
     </div>
