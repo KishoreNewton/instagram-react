@@ -1,49 +1,69 @@
-import React, { useContext, useState } from "react"
-import Layout from "../components/shared/Layout"
-import { useProfilePageStyles } from "../styles"
-import { defaultCurrentUser } from '../data'
-import { Avatar, Button, Card, CardContent, Dialog, DialogTitle, Divider, Hidden, Typography, Zoom } from "@material-ui/core"
-import ProfilePicture from '../components/shared/ProfilePicture'
-import { Link, useHistory, useParams } from "react-router-dom"
-import { GearIcon } from "../icons"
-import ProfileTabs from '../components/profile/ProfileTabs'
-import { AuthContext } from "../auth"
-import { useQuery } from "@apollo/react-hooks"
-import { GET_USER_PROFILE } from "../graphql/queries"
-import LoadingScreen from "../components/shared/LoadingScreen"
-import { UserContext } from "../App"
+import React, { useCallback, useContext, useState } from 'react';
+import Layout from '../components/shared/Layout';
+import { useProfilePageStyles } from '../styles';
+import {
+  Avatar,
+  Button,
+  Card,
+  CardContent,
+  Dialog,
+  DialogTitle,
+  Divider,
+  Hidden,
+  Typography,
+  Zoom,
+} from '@material-ui/core';
+import ProfilePicture from '../components/shared/ProfilePicture';
+import { Link, useHistory, useParams } from 'react-router-dom';
+import { GearIcon } from '../icons';
+import ProfileTabs from '../components/profile/ProfileTabs';
+import { AuthContext } from '../auth';
+import { useQuery } from '@apollo/react-hooks';
+import { GET_USER_PROFILE } from '../graphql/queries';
+import LoadingScreen from '../components/shared/LoadingScreen';
+import { UserContext } from '../App';
+import { useMutation } from '@apollo/react-hooks';
+import { FOLLOW_USER, UNFOLLOW_USER } from '../graphql/mutations';
 
 function ProfilePage() {
-  const { username } = useParams()
-  const { currentUserId } = useContext(UserContext)
-  const [showOptionsMenu, setOptionsMenu] = useState(false)
-  const classes = useProfilePageStyles()
+  const { username } = useParams();
+  const { currentUserId } = useContext(UserContext);
+  const [showOptionsMenu, setOptionsMenu] = useState(false);
+  const classes = useProfilePageStyles();
+  const variables = { username };
   const { data, loading } = useQuery(GET_USER_PROFILE, {
-    variables
-  })
+    variables,
+  });
 
-  if (loading) return <LoadingScreen />
-  const [user] = data.users[0]
-  const isOwner = user.id === currentUserId
+  if (loading) return <LoadingScreen />;
+  const [user] = data.users;
+  const isOwner = user.id === currentUserId;
 
   function handleOptionsMenuClick() {
-    setOptionsMenu(true)
+    setOptionsMenu(true);
   }
 
   function handleCloseMenu() {
-    setOptionsMenu(false)
+    setOptionsMenu(false);
   }
 
   return (
-    <Layout title={`${defaultCurrentUser.name} (@${defaultCurrentUser.username})`} >
+    <Layout title={`${user.name} (@${user.username})`}>
       <div className={classes.container}>
         <Hidden xsDown>
           <Card className={classes.cardLarge}>
-            <ProfilePicture isOwner={isOwner} />
+            <ProfilePicture
+              isOwner={isOwner}
+              image={user.profile_image}
+            />
             <CardContent className={classes.cardContentLarge}>
-              <ProfileNameSection user={defaultCurrentUser} isOwner={isOwner} handleOptionsMenuClick={handleOptionsMenuClick} />
-              <PostCountSection user={defaultCurrentUser} />
-              <NameBioSection user={defaultCurrentUser} />
+              <ProfileNameSection
+                user={user}
+                isOwner={isOwner}
+                handleOptionsMenuClick={handleOptionsMenuClick}
+              />
+              <PostCountSection user={user} />
+              <NameBioSection user={user} />
             </CardContent>
           </Card>
         </Hidden>
@@ -51,46 +71,96 @@ function ProfilePage() {
           <Card className={classes.cardSmall}>
             <CardContent>
               <section className={classes.sectionSmall}>
-                <ProfilePicture isOwner={isOwner} size={77} />
-                <ProfileNameSection user={defaultCurrentUser} handleOptionsMenuClick={handleOptionsMenuClick} isOwner={isOwner}  />
+                <ProfilePicture
+                  isOwner={isOwner}
+                  image={user.profile_image}
+                  size={77}
+                />
+                <ProfileNameSection
+                  user={user}
+                  handleOptionsMenuClick={handleOptionsMenuClick}
+                  isOwner={isOwner}
+                />
               </section>
-              <NameBioSection user={defaultCurrentUser} />
+              <NameBioSection user={user} />
             </CardContent>
-            <PostCountSection user={defaultCurrentUser} />
+            <PostCountSection user={user} />
           </Card>
         </Hidden>
-        {showOptionsMenu && <OptionsMenu handleCloseMenu={handleCloseMenu} />}
-        <ProfileTabs user={defaultCurrentUser} isOwner={isOwner} />
+        {showOptionsMenu && (
+          <OptionsMenu handleCloseMenu={handleCloseMenu} />
+        )}
+        <ProfileTabs user={user} isOwner={isOwner} />
       </div>
     </Layout>
-  )
+  );
 }
 
-function ProfileNameSection({ user, isOwner, handleOptionsMenuClick }) {
-  const classes = useProfilePageStyles()
-  const [showUnfollowDialog, setUnfollowDialog] = useState(false)
+function ProfileNameSection({
+  user,
+  isOwner,
+  handleOptionsMenuClick,
+}) {
+  const classes = useProfilePageStyles();
+  const { currentUserId, followingIds, followerIds } = useContext(
+    UserContext,
+  );
+  const [showUnfollowDialog, setUnfollowDialog] = useState(false);
+  const isAlreadyFollowing = followingIds.some(
+    (id) => id === user.id,
+  );
+  const [isFollowing, setFollowing] = useState(isAlreadyFollowing);
+  const isFollower =
+    !isFollowing && followingIds.some((id) => id === user.id);
+  const variables = {
+    userIdToFollow: user.id,
+    currentUserId,
+  };
+  const [followUser] = useMutation(FOLLOW_USER);
 
-  let followButton
-  const isFollowing = true 
-  const isFollower = false
+  function handleFollowUser() {
+    setFollowing(true);
+    followUser({ variables });
+  }
+
+  const onUnfollowUser = useCallback(() => {
+    setUnfollowDialog(false);
+    setFollowing(false);
+  });
+
+  let followButton;
   if (isFollowing) {
     followButton = (
-      <Button onClick={() => setUnfollowDialog(true)} variant="outlined" className={classes.button} >
+      <Button
+        onClick={() => setUnfollowDialog(true)}
+        variant="outlined"
+        className={classes.button}
+      >
         Following
       </Button>
-    ) 
+    );
   } else if (isFollower) {
     followButton = (
-      <Button variant="contained" color="primary" className={classes.button}>
+      <Button
+        onClick={handleFollowUser}
+        variant="contained"
+        color="primary"
+        className={classes.button}
+      >
         Follow Back
       </Button>
-    )
+    );
   } else {
     followButton = (
-      <Button variant="contained" color="primary" className={classes.button}>
+      <Button
+        onClick={handleFollowUser}
+        variant="contained"
+        color="primary"
+        className={classes.button}
+      >
         Follow
       </Button>
-    )
+    );
   }
   return (
     <>
@@ -104,14 +174,15 @@ function ProfileNameSection({ user, isOwner, handleOptionsMenuClick }) {
               <Link to="/accounts/edit">
                 <Button variant="outlined">Edit Profile</Button>
               </Link>
-              <div onClick={handleOptionsMenuClick} className={classes.settingsWrapper}>
+              <div
+                onClick={handleOptionsMenuClick}
+                className={classes.settingsWrapper}
+              >
                 <GearIcon className={classes.settings} />
               </div>
             </>
           ) : (
-            <>
-              {followButton}
-            </>
+            <>{followButton}</>
           )}
         </section>
       </Hidden>
@@ -122,36 +193,76 @@ function ProfileNameSection({ user, isOwner, handleOptionsMenuClick }) {
               {user.username}
             </Typography>
             {isOwner && (
-              <div onClick={handleOptionsMenuClick} className={classes.settingsWrapper}>
+              <div
+                onClick={handleOptionsMenuClick}
+                className={classes.settingsWrapper}
+              >
                 <GearIcon className={classes.settings} />
               </div>
             )}
           </div>
           {isOwner ? (
             <Link to="/accounts/edit">
-              <Button variant="outlined" style={{ width: '100%' }}>Edit Profile</Button>
+              <Button variant="outlined" style={{ width: '100%' }}>
+                Edit Profile
+              </Button>
             </Link>
-          ) : followButton}
+          ) : (
+            followButton
+          )}
         </section>
       </Hidden>
-      {showUnfollowDialog && <UnfollowDialog user={user} onClose={() => setUnfollowDialog(false)} />}
+      {showUnfollowDialog && (
+        <UnfollowDialog
+          onUnfollowUser={onUnfollowUser}
+          user={user}
+          onClose={() => setUnfollowDialog(false)}
+        />
+      )}
     </>
-  )
+  );
 }
 
-function UnfollowDialog({ user, onClose }) {
-  const classes = useProfilePageStyles()
-  
+function UnfollowDialog({ user, onClose, onUnfollowUser }) {
+  const classes = useProfilePageStyles();
+  const { currentUserId } = useContext(UserContext);
+  const [unfollowUser] = useMutation(UNFOLLOW_USER);
+
+  function handleUnfollowUser() {
+    const variables = {
+      currentUserId,
+      userIdToFollow: user.id,
+    };
+    unfollowUser({ variables })
+    onUnfollowUser();
+  }
+
   return (
-    <Dialog open classes={{ scrollPaper: classes.unfollowDialogScrollPaper }} onClose TransitionComponent={Zoom} >
+    <Dialog
+      open
+      classes={{ scrollPaper: classes.unfollowDialogScrollPaper }}
+      onClose={onClose}
+      TransitionComponent={Zoom}
+    >
       <div className={classes.wrapper}>
-        <Avatar src={user.profile_image} alt={`${user.username}'s avatar`} className={classes.avatar} />
+        <Avatar
+          src={user.profile_image}
+          alt={`${user.username}'s avatar`}
+          className={classes.avatar}
+        />
       </div>
-      <Typography align="center" variant="body2" className={classes.unfollowDialogText}>
+      <Typography
+        align="center"
+        variant="body2"
+        className={classes.unfollowDialogText}
+      >
         Unfollow @{user.username}?
       </Typography>
       <Divider />
-      <Button className={classes.unfollowButton}>
+      <Button
+        onClick={handleUnfollowUser}
+        className={classes.unfollowButton}
+      >
         Unfollow
       </Button>
       <Divider />
@@ -159,12 +270,12 @@ function UnfollowDialog({ user, onClose }) {
         Cancel
       </Button>
     </Dialog>
-  )
+  );
 }
 
 function PostCountSection({ user }) {
-  const classes = useProfilePageStyles()
-  const options = ["posts", "followers", "following"]
+  const classes = useProfilePageStyles();
+  const options = ['posts', 'followers', 'following'];
 
   return (
     <>
@@ -172,20 +283,16 @@ function PostCountSection({ user }) {
         <Divider />
       </Hidden>
       <section className={classes.followingSection}>
-        {options.map(option => (
+        {options.map((option) => (
           <div key={option} className={classes.followingText}>
             <Typography className={classes.followingCount}>
-              {user[option].length}
+              {user[`${option}_aggregate`].aggregate.count}
             </Typography>
             <Hidden xsDown>
-              <Typography>
-                {option}
-              </Typography>
+              <Typography>{option}</Typography>
             </Hidden>
             <Hidden smUp>
-              <Typography color="textSecondary">
-                {option}
-              </Typography>
+              <Typography color="textSecondary">{option}</Typography>
             </Hidden>
           </div>
         ))}
@@ -194,45 +301,48 @@ function PostCountSection({ user }) {
         <Divider />
       </Hidden>
     </>
-  )
+  );
 }
 
-function NameBioSection({user}) {
-  const classes = useProfilePageStyles()
-  const { name, bio, website } = user
+function NameBioSection({ user }) {
+  const classes = useProfilePageStyles();
+  const { name, bio, website } = user;
   return (
     <section className={classes.section}>
-      <Typography className={classes.typography}>
-        {name}
-      </Typography>
-      <Typography>
-        {bio}
-      </Typography>
+      <Typography className={classes.typography}>{name}</Typography>
+      <Typography>{bio}</Typography>
       <a href={website} target="_blank" rel="noopener noreferrer">
-        <Typography color="secondary" className={classes.typography} >
+        <Typography color="secondary" className={classes.typography}>
           {user.website}
         </Typography>
       </a>
     </section>
-  )
+  );
 }
 
 function OptionsMenu({ handleCloseMenu }) {
-  const { signOut } = useContext(AuthContext)
-  const classes = useProfilePageStyles()
-  const [showLogOutMessage, setLogOutMessage] = useState(false)
-  const history = useHistory()
+  const { signOut } = useContext(AuthContext);
+  const classes = useProfilePageStyles();
+  const [showLogOutMessage, setLogOutMessage] = useState(false);
+  const history = useHistory();
 
   function handleLogOutClick() {
-    setLogOutMessage(true)
+    setLogOutMessage(true);
     setTimeout(() => {
-      signOut()
-      history.push("/account/login")
-    }, 1500)
+      signOut();
+      history.push('/account/login');
+    }, 1500);
   }
 
-  return(
-    <Dialog open classes={{ scrollPaper: classes.dialogScrollPaper, paper: classes.dialogPaper }} TransitionComponent={Zoom} >
+  return (
+    <Dialog
+      open
+      classes={{
+        scrollPaper: classes.dialogScrollPaper,
+        paper: classes.dialogPaper,
+      }}
+      TransitionComponent={Zoom}
+    >
       {showLogOutMessage ? (
         <DialogTitle className={classes.dialogTitle}>
           Logging Out
@@ -240,7 +350,7 @@ function OptionsMenu({ handleCloseMenu }) {
             You need to log back in to continure using Instagram.
           </Typography>
         </DialogTitle>
-      ): (
+      ) : (
         <>
           <OptionsItem text="Change Password" />
           <OptionsItem text="Nametag" />
@@ -251,9 +361,8 @@ function OptionsMenu({ handleCloseMenu }) {
           <OptionsItem text="Cancel" onClick={handleCloseMenu} />
         </>
       )}
-      
     </Dialog>
-  )
+  );
 }
 
 function OptionsItem({ text, onClick }) {
@@ -264,7 +373,7 @@ function OptionsItem({ text, onClick }) {
       </Button>
       <Divider />
     </>
-  )
+  );
 }
 
-export default ProfilePage
+export default ProfilePage;

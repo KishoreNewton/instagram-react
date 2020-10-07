@@ -1,15 +1,47 @@
-import React from "react"
-import { useProfilePictureStyles } from "../../styles"
-import { Person } from '@material-ui/icons'
+import React, { useRef, useState, useContext } from 'react';
+import { useProfilePictureStyles } from '../../styles';
+import { Person } from '@material-ui/icons';
+import handleImageUpload from '../../utils/handleImageUpload';
+import { UserContext } from '../../App';
+import { useMutation } from '@apollo/react-hooks';
+import { EDIT_USER_AVATAR } from '../../graphql/mutations';
 
-function ProfilePicture({ size, image = "https://cdn.pixabay.com/photo/2020/03/01/10/24/power-4892237_960_720.jpg", isOwner }) {
-  const classes = useProfilePictureStyles({ size, isOwner })
+function ProfilePicture({ size, image, isOwner }) {
+  const { currentUserId } = useContext(UserContext)
+  const classes = useProfilePictureStyles({ size, isOwner });
+  const inputRef = useRef();
+  const [img, setImg] = useState(image)
+  const [editUserAvatar] = useMutation(EDIT_USER_AVATAR);
+
+  function openFileInput() {
+    inputRef.current.click();
+  }
+
+  async function handleUpdateProfilePic(event) {
+    const url = await handleImageUpload(event.target.files[0]);
+    const variables = { id: currentUserId, profileImage: url };
+    await editUserAvatar({ variables });
+    setImg(url);
+  }
 
   return (
     <section className={classes.section}>
+      <input
+        style={{ display: 'none' }}
+        ref={inputRef}
+        type="file"
+        onChange={handleUpdateProfilePic}
+      />
       {image ? (
-        <div className={classes.wrapper}>
-          <img src={image} alt="user profile" className={classes.image} />
+        <div
+          className={classes.wrapper}
+          onClick={isOwner ? openFileInput : () => null}
+        >
+          <img
+            src={img}
+            alt="user profile"
+            className={classes.image}
+          />
         </div>
       ) : (
         <div className={classes.wrapper}>
@@ -17,7 +49,7 @@ function ProfilePicture({ size, image = "https://cdn.pixabay.com/photo/2020/03/0
         </div>
       )}
     </section>
-  )
+  );
 }
 
-export default ProfilePicture
+export default ProfilePicture;
