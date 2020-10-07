@@ -733,6 +733,8 @@ export const usePostStyles = makeStyles((theme) => ({
   postContainer: {
     background: '#fff',
     width: '100%',
+    height: '100%',
+    objectFit: 'cover',
     [theme.breakpoints.only('xs')]: {
       marginTop: '-35px !important',
     },
@@ -743,6 +745,7 @@ export const usePostStyles = makeStyles((theme) => ({
     borderBottomRightRadius: '3px',
     borderTopRightRadius: '3px',
     position: 'relative',
+    objectFit: 'cover',
     flexDirection: 'column',
     width: '100%',
   },
@@ -765,7 +768,12 @@ export const usePostStyles = makeStyles((theme) => ({
   },
   postImage: {
     display: 'flex',
-    width: 'calc(100% - 335px)',
+    width: 'calc(100% - 350px)',
+    maxWidth: 'calc(100% - 350px)',
+    maxHeight: 'calc(100vh - 25px) !important',
+    '& img': {
+      objectFit: 'contain !important',
+    },
     [theme.breakpoints.only('xs')]: {
       width: 'initial !important',
       position: 'relative !important',
