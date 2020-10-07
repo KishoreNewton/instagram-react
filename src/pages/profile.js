@@ -4,15 +4,27 @@ import { useProfilePageStyles } from "../styles"
 import { defaultCurrentUser } from '../data'
 import { Avatar, Button, Card, CardContent, Dialog, DialogTitle, Divider, Hidden, Typography, Zoom } from "@material-ui/core"
 import ProfilePicture from '../components/shared/ProfilePicture'
-import { Link, useHistory } from "react-router-dom"
+import { Link, useHistory, useParams } from "react-router-dom"
 import { GearIcon } from "../icons"
 import ProfileTabs from '../components/profile/ProfileTabs'
 import { AuthContext } from "../auth"
+import { useQuery } from "@apollo/react-hooks"
+import { GET_USER_PROFILE } from "../graphql/queries"
+import LoadingScreen from "../components/shared/LoadingScreen"
+import { UserContext } from "../App"
 
 function ProfilePage() {
-  const isOwner = true
+  const { username } = useParams()
+  const { currentUserId } = useContext(UserContext)
   const [showOptionsMenu, setOptionsMenu] = useState(false)
   const classes = useProfilePageStyles()
+  const { data, loading } = useQuery(GET_USER_PROFILE, {
+    variables
+  })
+
+  if (loading) return <LoadingScreen />
+  const [user] = data.users[0]
+  const isOwner = user.id === currentUserId
 
   function handleOptionsMenuClick() {
     setOptionsMenu(true)
