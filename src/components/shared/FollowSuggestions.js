@@ -16,7 +16,6 @@ function FollowSuggestions({ hideHeader }) {
   const { me, followerIds } = useContext(UserContext)
   const variables = { limit: 20, followerIds, createdAt: me.created_at }
   const { data, loading } = useQuery(SUGGEST_USER, { variables })
-  console.log(data)
 
   return (
     <div className={classes.container}>

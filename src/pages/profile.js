@@ -103,7 +103,7 @@ function ProfileNameSection({
   handleOptionsMenuClick,
 }) {
   const classes = useProfilePageStyles();
-  const { currentUserId, followingIds, followerIds } = useContext(
+  const { currentUserId, followingIds } = useContext(
     UserContext,
   );
   const [showUnfollowDialog, setUnfollowDialog] = useState(false);

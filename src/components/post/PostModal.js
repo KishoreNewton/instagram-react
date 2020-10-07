@@ -7,7 +7,6 @@ import Post from './Post'
 
 function PostModal() {
   const { postId } = useParams()
-  console.log(postId)
   const classes = usePostModalStyles()
   const history = useHistory()
 

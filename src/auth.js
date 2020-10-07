@@ -82,7 +82,6 @@ function AuthProvider({ children }) {
 
   async function updateEmail(email) {
     await authState.user.updateEmail(email)
-    console.log(authState.user)
   }
 
   async function logInWithEmailAndPassword(email, password) {

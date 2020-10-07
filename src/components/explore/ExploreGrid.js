@@ -12,7 +12,6 @@ function ExploreGrid() {
   const { followingIds } = useContext(UserContext);
   const variables = { followingIds };
   const {data, loading} = useQuery(EXPLORE_POSTS, { variables });
-  console.log(data)
 
   return (
     <>

@@ -42,8 +42,6 @@ function EditProfilePage({ history }) {
   const classes = useEditProfilePageStyles();
   const [showDrawer, setDrawer] = useState(false);
 
-  console.log(process.env.REACT_APP_CLOUD_NAME);
-
   if (loading) return <LoadingScreen />;
 
   function handleToggleDrawer() {

@@ -45,7 +45,6 @@ function Post({ postId }) {
 
   // setTimeout(() => setLoading(false), 2000);
   if (loading) return <PostSkeleton />;
-  console.log(data)
   const {
     id,
     media,
