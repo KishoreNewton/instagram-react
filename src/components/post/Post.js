@@ -45,6 +45,7 @@ function Post({ postId }) {
 
   // setTimeout(() => setLoading(false), 2000);
   if (loading) return <PostSkeleton />;
+  console.log(data)
   const {
     id,
     media,
@@ -58,6 +59,7 @@ function Post({ postId }) {
     comments,
     location,
   } = data.posts_by_pk;
+
   const likesCount = likes_aggregate.aggregate.count;
 
   return (
