@@ -127,7 +127,7 @@ function ProfileNameSection({
   const onUnfollowUser = useCallback(() => {
     setUnfollowDialog(false);
     setFollowing(false);
-  });
+  }, []);
 
   let followButton;
   if (isFollowing) {

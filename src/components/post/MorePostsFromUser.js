@@ -3,7 +3,6 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useMorePostsFromUserStyles } from '../../styles';
 import { LoadingLargeIcon } from '../../icons';
-import { defaultUser } from '../../data';
 import GridPost from '../shared/GridPost';
 import {
   GET_POST,

@@ -2,6 +2,7 @@ import React from 'react';
 import { useGridPostStyles } from '../../styles';
 import { Typography } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
+import Img from 'react-graceful-image';
 
 function GridPost({ post }) {
   const history = useHistory();
@@ -32,7 +33,7 @@ function GridPost({ post }) {
           <Typography>{commentsCount}</Typography>
         </div>
       </div>
-      <img
+      <Img
         src={post.media}
         alt="Post Cover"
         className={classes.image}
