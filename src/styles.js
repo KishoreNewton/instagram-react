@@ -770,16 +770,24 @@ export const usePostStyles = makeStyles((theme) => ({
     maxWidth: 'calc(100% - 350px)',
     maxHeight: 'calc(100vh - 25px) !important',
     '& img': {
-      objectFit: 'contain !important'
+      objectFit: 'contain !important',
     },
     [theme.breakpoints.only('xs')]: {
-      width: 'initial !important',
+      // width: 'initial !important',
       position: 'relative !important',
       margin: '0 auto !important',
       textAlign: 'center',
+      display: 'flex',
+      width: '100vw',
+      maxWidth: '100vw',
+      maxHeight: 'calc(100vh - 51vh) !important',
       '& img': {
-        maxHeight: '200px !important',
-        maxWidth: '200px !important',
+        // width: '100vw',
+        // height: 'calc(100vh - 25px) !important',
+        // maxWidth: 'calc(100% - 350px)',
+        // maxHeight: 'calc(100vh - 25px) !important',
+        // maxHeight: '500px !important',
+        // maxWidth: '500px !important',
         objectFit: 'contain !important',
       },
     },
