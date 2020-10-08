@@ -14,7 +14,7 @@ function UserCard({ user = defaultUser, avatarSize = 44, location }) {
         <Avatar src={profile_image} alt="User avatar" className={classes.avatar} />
       </Link>
       <div className={classes.nameWrapper}>
-        <Link to={`${username}`}>
+        <Link to={`/${username}`}>
           <Typography variant="subtitle2" className={classes.typography}>
             {username}
           </Typography>
