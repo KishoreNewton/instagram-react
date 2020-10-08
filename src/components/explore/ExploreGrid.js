@@ -9,8 +9,8 @@ import { EXPLORE_POSTS } from '../../graphql/queries';
 
 function ExploreGrid() {
   const classes = useExploreGridStyles();
-  const { followingIds } = useContext(UserContext);
-  const variables = { followingIds };
+  const { feedIds } = useContext(UserContext);
+  const variables = { feedIds };
   const {data, loading} = useQuery(EXPLORE_POSTS, { variables });
 
   return (

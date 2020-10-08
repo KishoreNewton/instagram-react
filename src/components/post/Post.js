@@ -35,6 +35,7 @@ import {
   formatDateToNowShort,
   formatPostDate,
 } from '../../utils/formatData';
+import Img from 'react-graceful-image';
 
 function Post({ postId }) {
   const classes = usePostStyles();
@@ -52,7 +53,6 @@ function Post({ postId }) {
     likes_aggregate,
     saved_posts,
     created_at,
-    user_id,
     user,
     caption,
     comments,
@@ -72,7 +72,7 @@ function Post({ postId }) {
           />
         </div>
         <div className={classes.postImage}>
-          <img
+          <Img
             src={media}
             alt="Post Media"
             className={classes.image}
@@ -116,7 +116,7 @@ function Post({ postId }) {
             color="textSecondary"
             className={classes.datePosted}
           >
-            { formatPostDate(created_at) }
+            {formatPostDate(created_at)}
           </Typography>
 
           <Hidden xsDown>
@@ -128,7 +128,11 @@ function Post({ postId }) {
         </div>
       </article>
       {showOptionsDialog && (
-        <OptionsDialog postId={id} authorId={user.id} onClose={() => setOptionsDialog(false)} />
+        <OptionsDialog
+          postId={id}
+          authorId={user.id}
+          onClose={() => setOptionsDialog(false)}
+        />
       )}
     </div>
   );
@@ -277,7 +281,7 @@ function SaveButton({ savedPosts, postId }) {
   const isAlreadySaved = savedPosts.some(
     ({ user_id }) => user_id === currentUserId,
   );
-  const [saved, setSaved] = React.useState(isAlreadySaved);
+  const [saved, setSaved] = useState(isAlreadySaved);
   const Icon = saved ? RemoveIcon : SaveIcon;
   const onClick = saved ? handleRemove : handleSave;
   const [savePost] = useMutation(SAVE_POST);

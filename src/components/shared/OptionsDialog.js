@@ -3,7 +3,6 @@ import { Button, Dialog, Divider, Zoom } from '@material-ui/core';
 import { useOptionsDialogStyles } from '../../styles';
 import { Link, useHistory } from 'react-router-dom';
 import { UserContext } from '../../App';
-import { defaultPost } from '../../data';
 import { useMutation } from '@apollo/react-hooks';
 import { DELETE_POST, UNFOLLOW_USER } from '../../graphql/mutations';
 
@@ -53,7 +52,7 @@ function OptionsDialog({ onClose, authorId, postId }) {
       )}
       <Divider />
       <Button className={classes.button}>
-        <Link to={`/p/${defaultPost.id}`}>Go to post</Link>
+        <Link to={`/p/${postId}`}>Go to post</Link>
       </Button>
       <Divider />
       <Button className={classes.button}>Share</Button>

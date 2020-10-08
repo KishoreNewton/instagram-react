@@ -1,7 +1,5 @@
 {
   "version": 2,
-  "name": "instaclone",
-  "alias": "kn-insta-clone",
   "builds": [
     {
       "src": "package.json",
