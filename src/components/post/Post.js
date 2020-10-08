@@ -45,7 +45,6 @@ function Post({ postId }) {
 
   // setTimeout(() => setLoading(false), 2000);
   if (loading) return <PostSkeleton />;
-  console.log(data)
   const {
     id,
     media,
@@ -129,7 +128,7 @@ function Post({ postId }) {
         </div>
       </article>
       {showOptionsDialog && (
-        <OptionsDialog onClose={() => setOptionsDialog(false)} />
+        <OptionsDialog postId={id} authorId={user.id} onClose={() => setOptionsDialog(false)} />
       )}
     </div>
   );
