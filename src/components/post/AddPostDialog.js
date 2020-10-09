@@ -72,7 +72,7 @@ function AddPostDialog({ media, handleClose }) {
           </Button>
         </Toolbar>
       </AppBar>
-      <Paper className={classes.paper}>
+      <Paper className={classes.paper} style={{ top: '52px', position: 'relative' }}>
         <Avatar src={me.profile_image} />
         <Slate
           editor={editor}
@@ -91,6 +91,10 @@ function AddPostDialog({ media, handleClose }) {
         />
       </Paper>
       <TextField
+        style={{
+          position: 'relative',
+          top: '42px'
+        }}
         fullWidth
         placeholder="Location"
         InputProps={{
